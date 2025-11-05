@@ -10,11 +10,10 @@
 
 /* Styles pour le logo */
 #logo {
-    min-height: 2.5em; /* Hauteur minimale du logo */
-    width: auto; /* Largeur automatique pour conserver les proportions */
+    height: 2.5em; /* Hauteur du logo */
+    width: auto; /* Largeur */
     margin-bottom: 2rem; /* Espace entre le logo et les liens */
-    margin-right: 90em; /* Espace à droite du logo */
-    margin-left: -3em; /* Espace à gauche du logo */
+    margin-left: -0.5em; /* Espace à gauche du logo */
 }
 
 /* Styles pour les liens de la navbar */
