@@ -6,29 +6,32 @@
     flex-direction: column; /* Aligne les éléments en colonne */
     align-items: flex-start; /* Aligne tout à gauche */
     padding: 1rem; /* Espace intérieur */
+    padding-right: 6em;
+    padding-left: 1.5em;
 }
 
 /* Styles pour le logo */
 #logo {
     height: 2.5em; /* Hauteur du logo */
     width: auto; /* Largeur */
-    margin-bottom: 2rem; /* Espace entre le logo et les liens */
+    margin-bottom: 0.9rem; /* Espace entre le logo et les liens */
     margin-left: -0.5em; /* Espace à gauche du logo */
+    margin-top: 1em; /* Espace au-dessus du logo */
 }
 
 /* Styles pour les liens de la navbar */
-.Lien {
+.lien {
     display: block; /* Chaque lien sur sa propre ligne */
-    padding: 0.75rem 0; /* Espacement vertical entre les liens */
+    padding: 0.95rem 0; /* Espacement vertical entre les liens */
     text-decoration: none; /* Supprime le soulignement */
-    font-size: 1.1em; /* Taille de la police */
+    font-size: 0.93em; /* Taille de la police */
     color: #000; /* Couleur du texte */
     width: 100%; /* Prend toute la largeur disponible */
     text-align: left; /* Texte aligné à gauche */
 }
 
 /* Styles au survol des liens */
-.Lien:hover { /* Effet au survol */
+.lien:hover { /* Effet au survol */
     background-color: #f0f0f0; /* Effet au survol */
     border-radius: 8px; /* Bords arrondis au survol */
     padding-left: 0.1rem; /* Légère indentation au survol */
@@ -38,7 +41,7 @@
 .noto-sans-0 { 
   font-family: "Noto Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: 380;
   font-style: normal;
   font-variation-settings:
     "wdth" 100;
@@ -46,6 +49,68 @@
 
 /* Icones des liens de la navbar */
 .nav-icon {
-    margin-right: 0.5rem; /* Espace entre l'icône et le texte */
+    margin-right: 0.9rem; /* Espace entre l'icône et le texte */
+    font-size: 1.3em; /* Taille de l'icône */
 }
 
+
+nav {
+    border-right: 0.07em solid #ddd; /* Bordure droite pour séparer la navbar du contenu */
+    
+}
+
+/*=============================== ADAPTION POUR TOUS TYPES D'ÉCRANS ========================================================*/
+
+/* 1. Ajustements pour les tablettes et petits écrans (max 768px) */
+@media screen and (max-width: 768px) { /*@media screen and permet d'appliquer des styles spécifiques aux écrans de cette taille */
+    #logo {
+        height: 2em; /* Taille du logo */
+        margin-bottom: 1rem; /* Espace entre le logo et les liens */
+    }
+
+    .lien {
+        font-size: 1em; /* Texte légèrement plus petit */
+        padding: 0.5rem 0;
+    }
+    
+    .navbar-item {
+        padding: 0.5rem;
+    }
+}
+
+/* 2. Ajustement pour les très petits écrans (max 480px) */
+@media screen and (max-width: 480px) { /*@media screen and permet d'appliquer des styles spécifiques aux écrans de cette taille */
+    #logo {
+        height: 1.5em; /* Taille du logo */
+    }
+
+    .lien {
+        font-size: 0.9em; /* Taille du texte */
+    }
+}
+
+/* 3. Ajustements pour les grands écrans (min 1200px) */
+@media screen and (min-width: 1200px) { /*@media screen and permet d'appliquer des styles spécifiques aux écrans de cette taille */
+    .navbar-item {
+        max-width: 250px; /* la largeur maximale de la navbar */
+    }
+}
+
+/*=============================== RÉINITIALISATION DES STYLES DE BASE (ADAPTION AUX TYPES D'ÉCRANS) ==========================*/
+
+/* Reset de base pour éviter les débordements lorsque la taille de l'écran change */
+* {
+    box-sizing: border-box; /* Permet de mieux gérer les dimensions des éléments */
+}
+
+/* Réinitialisation des marges et paddings par défaut pour éviter les débordements */
+body {
+    margin: 0; /* Supprime les marges par défaut */
+    padding: 0; /* Supprime les paddings par défaut */
+}
+
+/*=========================================== BODY ==========================================*/
+
+.layout {
+    display: flex; /* flex pour aligner les éléments horizontalement */
+}
