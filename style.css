@@ -112,5 +112,43 @@ body {
 /*=========================================== BODY ==========================================*/
 
 .layout {
-    display: flex; /* flex pour aligner les éléments horizontalement */
+    display: flex; /* Flex pour aligner header (navbar) et main horizontalement */
 }
+
+main {
+    flex:1; /* Le main prend tout l'espace restant */
+}
+
+/*=========================================== STORIES ==========================================*/
+
+.stories-section {
+    padding: 1rem; /* Espace autour de la section des stories */
+    
+}
+
+.stories-container {
+    display: flex; /* Utilise un conteneur flex pour afficher les images */
+    align-items: flex-start; /* Aligne les images en haut */
+    flex-direction: row; /* Aligne les images en ligne */
+    gap: 1rem; /* Espace entre les images */
+    overflow-x: scroll; /* Permet le défilement horizontal */
+    padding-bottom: 1rem; /* Espace en bas pour éviter que les images touchent le bord */
+    padding-top: 1rem; /* Espace en haut pour éviter que les images touchent le bord */
+}
+
+.story-image {
+    width: 5em; /* Largeur fixe pour chaque image de story */
+    height: 5em; /* Hauteur fixe pour chaque image */
+    border-radius: 50%; /* Forme circulaire pour les stories */
+    object-fit: cover; /* Recadre l'image pour qu'elle remplisse le cercle */
+    border: 0.2em solid white; /* Bordure blanche intérieure */
+    box-shadow: 0 0 0 3px #e91e63; /* Bordure rose extérieure autour de la bordure blanche */
+    cursor: pointer; /* Curseur pointeur au survol */
+}
+
+.story-image:hover {
+    transform: scale(1.05); /* Légère augmentation au survol */
+    transition: transform 0.2s ease; /* Animation fluide */
+}
+
+
