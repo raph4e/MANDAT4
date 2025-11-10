@@ -1,50 +1,84 @@
-//=================================== GÉNÉRATION D'IMAGES VIA PEXELS API ===================================//
+//================================== GÉNÉRATION D'IMAGES ET VIDÉOS VIA PEXELS API ==================================//
 
-// Chargement d'images depuis l'API Pexels
-const API_KEY = "YEmthrJDjy7vr7tybv61l9DIASRDocDqYjI7oGn28VdSMphODN3AXMXH"; // Clé API Pexels (obligatoire pour obtenir leurs images et vidéos)
+// Clé API Pexels
+const API_KEY = "YEmthrJDjy7vr7tybv61l9DIASRDocDqYjI7oGn28VdSMphODN3AXMXH";
 
-// mieux avec try catch pour gérer les erreurs sinon ça plante
-const LoadImage = async () => { // Fonction asynchrone pour charger des images depuis Pexels
+
+//------------------------------ Chargement des images depuis Pexels -----------------------------
+
+// Ici on vient charger des images depuis l'API Pexels
+const LoadImages = async () => { // async function pour charger des images
     try {
-        // Génère un numéro de page aléatoire pour obtenir des images différentes à chaque rechargement
-        const randomPage = Math.floor(Math.random() * 100) + 1; // Page aléatoire entre 1 et 100
-        
-        const response = await fetch(`https://api.pexels.com/v1/curated?per_page=10&page=${randomPage}`, { // Requête à l'API Pexels avec une page aléatoire
-            headers: { // headers indique les informations supplémentaires envoyées avec la requête HTTP
-                Authorization: API_KEY // Authentification avec la clé API qui est obligatoire pour accéder aux ressources de l'API
-            }
+        const randomPage = Math.floor(Math.random() * 50) + 1; // Génère un numéro de page aléatoire entre 1 et 50
+        const response = await fetch(`https://api.pexels.com/v1/curated?per_page=10&page=${randomPage}`, { // Requête à l'API Pexels pour obtenir des images (await fetch permet d'attendre la réponse)
+            headers: { Authorization: API_KEY } // Ajoute la clé API dans les en-têtes de la requête
         });
-        
-        const data = await response.json(); // Conversion de la réponse en JSON (la méthode json() lit le corps de la réponse et le convertit en un objet JavaScript)
+        const data = await response.json(); // convertit la réponse en JSON pour qu'on puisse l'utiliser
 
-//-------------------------------- AFFICHAGE DES IMAGES DANS LES STORIES ----------------------------------//
-        
-        // Affiche plusieurs images dans le conteneur
-        data.photos.forEach(photo => { // Parcourt chaque photo dans les données reçues
-            const img = document.createElement("img"); // Crée un élément image HTML
-            img.src = photo.src.medium; // Utilise l'URL de l'image en taille moyenne
-            img.alt = photo.alt || "Image de l'utilisateur"; // Texte alternatif
-            img.classList.add("story-image"); // Ajoute une classe CSS à l'image
-            document.querySelector(".stories-container").appendChild(img); // Ajoute l'image au conteneur
+        // Affichage dans les stories
+        data.photos.forEach(photo => { // vient parcourir chaque photo reçue
+            const img = document.createElement("img"); // vient créer un élément image en HTML
+            img.src = photo.src.medium; // vient définir la source de l'image
+            img.alt = photo.alt || "Image de l'utilisateur"; // définit le texte alternatif de l'image
+            img.classList.add("story-image"); // ajoute une classe CSS à l'image
+            document.querySelector(".stories-container").appendChild(img); // ajoute l'image au conteneur des stories en HTML
         });
 
-//-------------------------------- AFFICHAGE DES IMAGES DANS LES PUBLICATIONS ----------------------------------//
-        
-        // Affiche plusieurs images dans le conteneur
-        data.photos.forEach(photo => { // Parcourt chaque photo dans les données reçues
-            const img = document.createElement("img"); // Crée un élément image HTML
-            img.src = photo.src.medium; // Utilise l'URL de l'image en taille moyenne
-            img.alt = photo.alt || "Image de l'utilisateur"; // Texte alternatif
-            img.classList.add("post-image"); // Ajoute une classe CSS à l'image
-            document.querySelector(".posts-container").appendChild(img); // Ajoute l'image au conteneur
+        // Affichage dans les publications
+        data.photos.forEach(photo => { // vient parcourir chaque photo reçue
+            const img = document.createElement("img"); // vient créer un élément image en HTML
+            img.src = photo.src.large; // vient définir la source de l'image
+            img.alt = photo.alt || "Image de l'utilisateur"; // définit le texte alternatif de l'image
+            img.classList.add("post-image"); // ajoute une classe CSS à l'image
+            document.querySelector(".posts-container").appendChild(img); // ajoute l'image au conteneur des publications en HTML
         });
-
-
-        
     } catch (error) {
-        console.error(error); // Affiche l'erreur dans la console
+        console.error(error);
     }
 };
 
-window.onload = LoadImage; // Appelle la fonction LoadImage lorsque la fenêtre est chargée
+//-------------------------------------- Chargement des vidéos depuis Pexels -------------------
 
+// Ici on vient charger des vidéos depuis l'API Pexels
+const LoadVideos = async () => { // async function pour charger des vidéos
+    try {
+        const randomPage = Math.floor(Math.random() * 50) + 1; // Génère un numéro de page aléatoire entre 1 et 50
+        const response = await fetch(`https://api.pexels.com/videos/popular?per_page=10&page=${randomPage}`, { // Requête à l'API Pexels pour obtenir des vidéos
+            headers: { Authorization: API_KEY } // Ajoute la clé API dans les en-têtes de la requête
+        });
+        const data = await response.json(); // convertit la réponse en JSON pour qu'on puisse l'utiliser
+
+        // Affichage des vidéos dans les stories
+        data.videos.forEach(video => { // vient parcourir chaque vidéo reçue
+            const videoElement = document.createElement("video"); // vient créer un élément vidéo en HTML
+            videoElement.src = video.video_files[0].link; // vient définir la source de la vidéo
+            videoElement.controls = true; // ajoute des contrôles à la vidéo servant à lire, mettre en pause, etc.
+            videoElement.classList.add("story-image"); // ajoute une classe CSS à la vidéo
+            videoElement.setAttribute("preload", "metadata"); // définit l'attribut preload de la vidéo pour charger les métadonnées avant la lecture
+            document.querySelector(".stories-container").appendChild(videoElement); // ajoute la vidéo au conteneur des stories en HTML
+        });
+        
+        // Affichage des vidéos dans les publications
+        data.videos.forEach(video => { // vient parcourir chaque vidéo reçue
+            const videoElement = document.createElement("video"); // vient créer un élément vidéo en HTML
+            videoElement.src = video.video_files[0].link; // vient définir la source de la vidéo
+            videoElement.controls = true; // ajoute des contrôles à la vidéo servant à lire, mettre en pause, etc.
+            videoElement.classList.add("post-image"); // ajoute une classe CSS à la vidéo
+            videoElement.setAttribute("preload", "metadata"); // définit l'attribut preload de la vidéo pour charger les métadonnées avant la lecture
+            document.querySelector(".posts-container").appendChild(videoElement); // ajoute la vidéo au conteneur des publications en HTML
+        });
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+//-------------------------------- Chargement du contenu au chargement de la page -----------------------------
+
+/*
+IL VA FALLOIR TROUVER UNE FONCTION POUR CHARGER ALÉATOIREMENT LES IMAGES ET VIDÉOS (J'AI ESSAYÉ 
+AVEC RANDOM MAIS ÇA NE MARCHAIT PAS)
+*/
+window.onload = async () => { // window.onload permet d'exécuter le code une fois que la page est complètement chargée
+    await LoadImages(); 
+    await LoadVideos(); 
+}
