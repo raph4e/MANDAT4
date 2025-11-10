@@ -115,26 +115,40 @@ body {
     display: flex; /* Flex pour aligner header (navbar) et main horizontalement */
 }
 
+header {
+    position: fixed; /* Fixe la navbar à gauche */
+    top: 0; /* Positionne en haut */
+    left: 0; /* Positionne à gauche */
+    height: 100vh; /* Prend toute la hauteur de l'écran */
+    background-color: white; /* Fond blanc pour la navbar */
+    z-index: 1000; /* Place la navbar au-dessus du contenu */
+}
+
 main {
-    flex:1; /* Le main prend tout l'espace restant */
+    flex: 1; /* Le main prend tout l'espace restant */
+    margin-left: 15em; /* Décale le main pour ne pas être caché par la navbar fixe */
+    overflow-y: auto; /* Permet le défilement du contenu principal */
 }
 
 /*=========================================== STORIES ==========================================*/
 
 .stories-section {
     padding: 1rem; /* Espace autour de la section des stories */
-    
+    max-width: fit-content; /* S'adapte au contenu */
 }
 
 .stories-container {
     display: flex; /* Utilise un conteneur flex pour afficher les images */
     align-items: flex-start; /* Aligne les images en haut */
     flex-direction: row; /* Aligne les images en ligne */
-    gap: 1rem; /* Espace entre les images */
-    overflow-x: scroll; /* Permet le défilement horizontal */
-    padding-bottom: 1rem; /* Espace en bas pour éviter que les images touchent le bord */
-    padding-top: 1rem; /* Espace en haut pour éviter que les images touchent le bord */
+    gap: 1.8rem; /* Espace entre les images */
+    overflow-x: visible; /* Permet le défilement horizontal */
+    overflow-y: hidden; /* Cache  le défilement vertical */
+    padding-bottom: 0.5rem; /* Espace en bas */
+    padding-top: 1rem; /* Espace en haut */
+    max-width: calc((5.5em + 1.1rem) * 6); /* Limite à 6 images visibles : (largeur image + gap) * 6 */
 }
+
 
 .story-image {
     width: 5em; /* Largeur fixe pour chaque image de story */
@@ -142,13 +156,29 @@ main {
     border-radius: 50%; /* Forme circulaire pour les stories */
     object-fit: cover; /* Recadre l'image pour qu'elle remplisse le cercle */
     border: 0.2em solid white; /* Bordure blanche intérieure */
-    box-shadow: 0 0 0 3px #e91e63; /* Bordure rose extérieure autour de la bordure blanche */
-    cursor: pointer; /* Curseur pointeur au survol */
+    box-shadow: 0 0 0 3.8px #e91e63; /* Bordure rose extérieure autour de la bordure blanche */
+    flex-shrink: 0; /* Empêche les images de rétrécir */
+    margin-left: -1.5em; /* Espace entre les images */
+    margin-right: 1.5em; /* Espace entre les images */
 }
 
-.story-image:hover {
-    transform: scale(1.05); /* Légère augmentation au survol */
-    transition: transform 0.2s ease; /* Animation fluide */
+/*=========================================== STYLE PUBLICATIONS ==========================================*/
+
+.posts-container {
+    display: flex; /* Utilise un conteneur flex pour afficher les images */
+    align-items: flex-start; /* Aligne les images en haut */
+    flex-direction: column; /* Aligne les images en colonne */
+    gap: 4em; /* Espace entre les images */
+    padding: 0 7em; /* Espace autour des publications */
+    align-items: center; /* Centre les images horizontalement */
+    max-width: 65%; /* Limite la largeur maximale à 65% */
 }
 
+.post-image {
+    width: 100%; /* L'image prend toute la largeur du conteneur */
+    height: auto; /* Hauteur automatique pour conserver les proportions */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère pour donner de la profondeur */
+    align-content: center; /* Centre l'image dans le conteneur */
+    border-radius: 0.5em;
+}
 
