@@ -1,0 +1,11 @@
+
+// Requête qui permet de créer un nouvel utilisateur (TEST) 
+curl -X POST http://localhost:3000/addUser \
+    -H "Content-Type: application/json" \
+    -d '{"name":"alek","password":"motdepasseAlek"}'
+
+
+// Requête qui permet de se connecter à un utilisateur existant
+curl -X POST http://localhost:3000/loginUser \
+    -H "Content-Type: application/json" \
+    -d '{"name":"raphael","password":"motdepasse1234"}'
