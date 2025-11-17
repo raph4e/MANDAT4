@@ -111,10 +111,12 @@ body {
 
 /*=========================================== BODY ==========================================*/
 
+/* Conteneur principal pour la mise en page (séparation header et main) */
 .layout {
     display: flex; /* Flex pour aligner header (navbar) et main horizontalement */
 }
 
+/* Styles pour la navbar fixe */
 header {
     position: fixed; /* Fixe la navbar à gauche */
     top: 0; /* Positionne en haut */
@@ -124,6 +126,7 @@ header {
     z-index: 1000; /* Place la navbar au-dessus du contenu */
 }
 
+/* Styles pour le contenu principal */
 main {
     flex: 1; /* Le main prend tout l'espace restant */
     margin-left: 15em; /* Décale le main pour ne pas être caché par la navbar fixe */
@@ -132,11 +135,13 @@ main {
 
 /*=========================================== STORIES ==========================================*/
 
+/* Conteneur des stories */
 .stories-section {
     padding: 1rem; /* Espace autour de la section des stories */
     max-width: fit-content; /* S'adapte au contenu */
 }
 
+/* Conteneur des images de stories */
 .stories-container {
     display: flex; /* Utilise un conteneur flex pour afficher les images */
     align-items: flex-start; /* Aligne les images en haut */
@@ -150,6 +155,7 @@ main {
 }
 
 
+/* Styles pour chaque image de story */
 .story-image {
     width: 5em; /* Largeur fixe pour chaque image de story */
     height: 5em; /* Hauteur fixe pour chaque image */
@@ -162,8 +168,9 @@ main {
     margin-right: 1.5em; /* Espace entre les images */
 }
 
-/*=========================================== STYLE PUBLICATIONS ==========================================*/
+/*=========================================== PUBLICATIONS ==========================================*/
 
+/* Conteneur des publications */
 .posts-container {
     display: flex; /* Utilise un conteneur flex pour afficher les images */
     align-items: flex-start; /* Aligne les images en haut */
@@ -174,11 +181,136 @@ main {
     max-width: 65%; /* Limite la largeur maximale à 65% */
 }
 
+/* Styles pour chaque image de publication */
 .post-image {
     width: 100%; /* L'image prend toute la largeur du conteneur */
     height: auto; /* Hauteur automatique pour conserver les proportions */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère pour donner de la profondeur */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
     align-content: center; /* Centre l'image dans le conteneur */
-    border-radius: 0.5em;
+    border-radius: 0.5em; /* Bords légèrement arrondis */
 }
 
+/*=========================================== SUGGESTIONS AMIS ==========================================*/
+
+/* Conteneur de la section des suggestions d'amis */
+.suggestions-section {
+    position: absolute; /* Position absolue pour fixer ne haut mais en laissant défiler avec le contenu */
+    top: 0.5rem; /* Position depuis le haut du contenu */
+    right: 2rem; /* Position depuis la droite */
+    width: 300px; /* Largeur fixe pour la section */
+    padding: 1rem; /* Espace autour du contenu */
+    background-color: white; /* Fond blanc */
+    padding-right: 10em; /* Espace à droite pour éviter le débordement */
+    padding-left: 2em; /* Espace à gauche */
+}
+
+/* Conteneur des suggestions d'amis */
+.suggestions-container {
+    display: flex; /* flex pour pouvoir aligner les suggestions */
+    flex-direction: column; /* Aligne les suggestions en colonne */
+    gap: 1.5rem; /* Espace entre les suggestions */
+    padding-right: 8em;
+    max-width: calc((3.3em + 1.1rem) * 3); /* Limite à 5 images visibles : (largeur image + gap) * 5 */
+}
+
+/* Styles pour l'ensemble des suggestions d'amis */
+.suggestion-item {
+    display: flex; /* Utilise flexbox pour aligner les éléments */
+    flex-direction: row; /* Aligne les éléments en ligne */
+    align-items: center; /* Aligne verticalement au centre */
+    justify-content: space-between; /* Espace entre les éléments */
+    gap: 0.75rem; /* Espace entre les éléments */
+    padding: 0.5rem 0; /* Espace en haut et en bas */
+    width: 100%; /* Prend toute la largeur disponible */
+    margin-top: -2em; /* Décalage vers le haut */
+}
+
+/* Styles pour chaque image de suggestion d'ami */
+.suggestion-image {
+    width: 2.9em; /* Largeur fixe pour chaque image de suggestion */
+    height: 2.9em; /* Hauteur fixe pour chaque image */
+    border-radius: 50%; /* Forme circulaire */
+    object-fit: cover; /* Recadre l'image pour qu'elle remplisse le cercle */
+    flex-shrink: 0; /* Empêche les images de rétrécir */
+}
+
+/* Styles pour le nom de chaque suggestion d'ami */
+.suggestion-name {
+    font-size: 0.80em; /* Taille de police */
+    font-weight: 550; /* Poids de la police */
+    color: #000; /* Couleur du texte */
+    flex: 1; /* Prend tout l'espace disponible */
+    margin-left: -0.5em; /* Décalage vers la gauche */
+    min-width: 0; /* Important pour que le texte puisse se réduire */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+}
+
+
+/* Styles pour le lien "S'abonner" */
+.follow-link {
+    font-size: 0.75em; /* Taille de police */
+    color: #3897f0; /* Couleur du lien */
+    text-decoration: none; /* Pas de soulignement */
+    font-weight: 600; /* Poids de la police */
+    cursor: pointer; /* Curseur en forme de main */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    flex-shrink: 0; /* Empêche le lien de rétrécir */
+    margin-left: 12em; /* Décalage vers la gauche */
+}
+
+/* Styles pour le titre de la section des suggestions d'amis */
+.suggestions-section h5 {
+    font-size: 0.85em; /* Taille de police */
+    font-weight: 600; /* Poids de la police */
+    margin-bottom: 1rem; /* Marge en bas */
+    display: flex; /* Utilise flexbox */
+    justify-content: space-between; /* Espace entre les éléments */
+    align-items: center; /* Aligne verticalement au centre */
+    width: 100%; /* Prend toute la largeur disponible */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+}
+
+/* Styles pour le span (Afficher tout) dans le titre des suggestions d'amis */
+.suggestions-section h5 span {
+    font-size: 0.85em; /* Taille de police */
+    font-weight: 600; /* Poids de la police */
+    cursor: pointer; /* Curseur en forme de main */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    margin-left: 4.7em; /* Décalage vers la gauche */
+}
+
+/* Effet au survol du span (Afficher tout) */
+.suggestions-section h5 span:hover {
+    color: grey; /* Couleur grise au survol */
+}
+
+
+/* Effet au survol du lien "S'abonner" */
+.follow-link:hover {
+    color: #1a73e8; /* Couleur bleue plus foncée au survol */
+}
+
+/*=========================================== PASTILLE MESSAGES ==========================================*/
+
+/* Conteneur de la pastille de messages */
+.messages-badge-section {
+    position: fixed; /* Position fixe pour rester visible lors du défilement */
+    top: 28.5rem; /* Position depuis le haut de l'écran */
+    right: 0.5rem; /* Position depuis la droite de l'écran */
+    z-index: 1100; /* Au-dessus de la navbar et du contenu */
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.18), 0px -2px 6px rgba(0, 0, 0, 0.02); /* Ombre en bas et en haut */
+    padding: 1.2em 8.8em 1.2em 1em; /* Espacement interne */
+    border-radius: 30em; /* Bords arrondis */
+}
+
+/* Styles pour le texte dans la pastille de messages */
+.messages-badge-section span {
+    font-size: 0.95em; /* Taille de police */
+    font-weight: 530; /* Poids de la police */
+    margin-left: 0.5em; /* Marge à gauche */
+}
+
+/* Styles pour l'icône des messages */
+.messages-icon {
+    font-size: 1.3em; /* Taille de l'icône */
+}

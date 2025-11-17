@@ -32,6 +32,38 @@ const LoadImages = async () => { // async function pour charger des images
             img.classList.add("post-image"); // ajoute une classe CSS à l'image
             document.querySelector(".posts-container").appendChild(img); // ajoute l'image au conteneur des publications en HTML
         });
+
+        // Affichage dans les suggestions (maximum 5)
+        data.photos.slice(0, 5).forEach((photo, index) => { // slice(0, 5) limite à 5 photos maximum
+            const suggestionItem = document.createElement("div"); // Crée un conteneur pour chaque suggestion
+            suggestionItem.classList.add("suggestion-item", "noto-sans-0"); // Ajoute une classe CSS au conteneur
+            
+            // Création de la photo de la suggestion
+            const img = document.createElement("img"); // crée l'élément image
+            img.src = photo.src.small; // définit la source de l'image
+            img.alt = photo.alt || "Image de suggestion"; // définit le texte alternatif de l'image
+            img.classList.add("suggestion-image"); // ajoute une classe CSS à l'image
+            
+            // Création du nom de l'utilisateur
+            const userName = document.createElement("span"); // crée l'élément span pour le nom
+            userName.textContent = photo.photographer || `utilisateur_${index + 1}`; // utilise le nom de l'utilisateur fourni par l'API (photographeur mais utilisé ici comme nom d'utilisateur)
+            userName.classList.add("suggestion-name"); // ajoute une classe CSS au nom
+
+            // Création du lien "S'abonner"
+            const followLink = document.createElement("a"); // crée l'élément lien
+            followLink.textContent = "S'abonner"; // définit le texte du lien
+            followLink.href = "#"; // définit l'attribut href du lien
+            followLink.classList.add("follow-link"); // ajoute une classe CSS au lien
+            
+            
+            // Ajoute l'image et le nom au conteneur
+            suggestionItem.appendChild(img);
+            suggestionItem.appendChild(userName);
+            suggestionItem.appendChild(followLink);
+            
+            // Ajoute le conteneur aux suggestions
+            document.querySelector(".suggestions-container").appendChild(suggestionItem);
+        });
     } catch (error) {
         console.error(error);
     }
@@ -82,3 +114,7 @@ window.onload = async () => { // window.onload permet d'exécuter le code une fo
     await LoadImages(); 
     await LoadVideos(); 
 }
+
+
+
+
