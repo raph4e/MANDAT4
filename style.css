@@ -6,58 +6,86 @@
     flex-direction: column; /* Aligne les éléments en colonne */
     align-items: flex-start; /* Aligne tout à gauche */
     padding: 1rem; /* Espace intérieur */
-    padding-right: 6em;
-    padding-left: 1.5em;
+    padding-right: 6em; /* Espace à droite pour éviter le débordement */
 }
 
+
 /* Styles pour le logo */
-#logo {
-    height: 2.5em; /* Hauteur du logo */
-    width: auto; /* Largeur */
-    margin-bottom: 0.9rem; /* Espace entre le logo et les liens */
-    margin-left: -0.5em; /* Espace à gauche du logo */
-    margin-top: 1em; /* Espace au-dessus du logo */
+.logo-icon {
+    font-size: 1.25em; /* Taille du logo */
+    color: #000; /* Couleur du logo */
+    font-weight: 590; /* Poids de la police */
+    margin-bottom: 0.08em; /* Espace en dessous du logo */
+    margin-top: -0.1em; /* Espace au-dessus du logo */
+    padding-bottom: 5em;   /* Espace en dessous du logo */
+    padding: 0.5rem; /* Espace intérieur */
+    margin-left: -0.18em; /* Décalage vers la gauche */
 }
+
+/* Effet au survol du logo */
+.logo-icon:hover {
+    background-color: #f0f0f0; /* Couleur de fond au survol */
+    border-radius: 8px; /* Bords arrondis */
+}
+
+
+
+
+
+/* Styles pour la navbar fixe */
+header {
+    position: fixed; /* Fixe la navbar à gauche */
+    height: 100vh; /* Hauteur de la fenêtre */
+    background-color: white; /* Fond blanc */
+    width: 4rem; /* Largeur réduite (icônes seulement) */
+    transition: width 0.3s ease; /* Animation fluide */
+    overflow: hidden; /* Cache le texte qui dépasse */
+}
+
+/* Expansion de la navbar au survol */
+header:hover {
+    width: 15em; /* Largeur complète au survol */
+}
+
+
 
 /* Styles pour les liens de la navbar */
 .lien {
-    display: block; /* Chaque lien sur sa propre ligne */
-    padding: 0.95rem 0; /* Espacement vertical entre les liens */
-    text-decoration: none; /* Supprime le soulignement */
-    font-size: 0.93em; /* Taille de la police */
+    display: flex; /* Utilise Flexbox pour aligner l'icône et le texte */
+    align-items: center; /* Centre verticalement les éléments */
+    padding: 1rem 0.4rem; /* Espace intérieur */
+    text-decoration: none; /* Supprime le soulignement des liens */
+    font-size: 0.93em; /* Taille du texte */
     color: #000; /* Couleur du texte */
-    width: 100%; /* Prend toute la largeur disponible */
-    text-align: left; /* Texte aligné à gauche */
+    width: 100%; /* Largeur complète */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    border-radius: 8px; /* Bords arrondis */
+    padding-right: 4.5em; /* Espace à droite */
 }
 
 /* Styles au survol des liens */
-.lien:hover { /* Effet au survol */
-    background-color: #f0f0f0; /* Effet au survol */
-    border-radius: 8px; /* Bords arrondis au survol */
-    padding-left: 0.1rem; /* Légère indentation au survol */
-}
-
-/* Styles pour la police du navbar de Google Fonts (liens nécessaires dans la page index.html) */
-.noto-sans-0 { 
-  font-family: "Noto Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 380;
-  font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
+.lien:hover {
+    background-color: #f0f0f0; /* Couleur de fond au survol */
 }
 
 /* Icones des liens de la navbar */
 .nav-icon {
     margin-right: 0.9rem; /* Espace entre l'icône et le texte */
-    font-size: 1.3em; /* Taille de l'icône */
+    font-size: 1.4em; /* Taille de l'icône */
+    min-width: 1.4em; /* Garde la largeur de l'icône constante */
+}
+
+/* Styles pour la police du navbar de Google Fonts */
+.noto-sans-0 { 
+  font-family: "Noto Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
 
 
-nav {
-    border-right: 0.07em solid #ddd; /* Bordure droite pour séparer la navbar du contenu */
-    
-}
+
 
 /*=============================== ADAPTION POUR TOUS TYPES D'ÉCRANS ========================================================*/
 
@@ -116,21 +144,13 @@ body {
     display: flex; /* Flex pour aligner header (navbar) et main horizontalement */
 }
 
-/* Styles pour la navbar fixe */
-header {
-    position: fixed; /* Fixe la navbar à gauche */
-    top: 0; /* Positionne en haut */
-    left: 0; /* Positionne à gauche */
-    height: 100vh; /* Prend toute la hauteur de l'écran */
-    background-color: white; /* Fond blanc pour la navbar */
-    z-index: 1000; /* Place la navbar au-dessus du contenu */
-}
 
 /* Styles pour le contenu principal */
 main {
-    flex: 1; /* Le main prend tout l'espace restant */
-    margin-left: 15em; /* Décale le main pour ne pas être caché par la navbar fixe */
-    overflow-y: auto; /* Permet le défilement du contenu principal */
+    flex: 1;
+    margin-left: 5rem; /* Décalage correspondant à la navbar réduite */
+    overflow-y: auto; /* Permet le défilement vertical si nécessaire */
+    transition: margin-left 0.3s ease; /* Animation fluide si nécessaire */
 }
 
 /*=========================================== STORIES ==========================================*/
@@ -139,6 +159,7 @@ main {
 .stories-section {
     padding: 1rem; /* Espace autour de la section des stories */
     max-width: fit-content; /* S'adapte au contenu */
+    padding-left: 1rem; /* Espace à gauche */
 }
 
 /* Conteneur des images de stories */
@@ -150,8 +171,13 @@ main {
     overflow-x: visible; /* Permet le défilement horizontal */
     overflow-y: hidden; /* Cache  le défilement vertical */
     padding-bottom: 0.5rem; /* Espace en bas */
-    padding-top: 1rem; /* Espace en haut */
-    max-width: calc((5.5em + 1.1rem) * 6); /* Limite à 6 images visibles : (largeur image + gap) * 6 */
+    padding-top: 0.5em; /* Espace en haut */
+    padding-left: -1em; /* Espace à gauche */
+    max-width: calc((6em + 0.8rem) * 6); /* Limite à 6 images visibles : (largeur image + gap) * 6 */
+    scroll-behavior: smooth; /* Défilement fluide */
+    scrollbar-width: 1em; /* largeur de la scrollbar*/
+    margin-left:3em; /* Décalage vers la droite */
+    margin-right: -1em; /* Décalage vers la gauche */
 }
 
 
@@ -161,11 +187,13 @@ main {
     height: 5em; /* Hauteur fixe pour chaque image */
     border-radius: 50%; /* Forme circulaire pour les stories */
     object-fit: cover; /* Recadre l'image pour qu'elle remplisse le cercle */
-    border: 0.2em solid white; /* Bordure blanche intérieure */
-    box-shadow: 0 0 0 3.8px #e91e63; /* Bordure rose extérieure autour de la bordure blanche */
+    border: 0.1em solid white; /* Bordure blanche intérieure */
+    box-shadow: 0 0 0 0.15em #ff69b4, 0 0 0 0.2em #9370db, 0 0 0 0.2em #dc2743, 0 0 0 0.2em #ff8c00, 0 0 0 0.2em #ffd700;
+    padding: 0.15em; /* Espace entre l'image et la bordure */
     flex-shrink: 0; /* Empêche les images de rétrécir */
     margin-left: -1.5em; /* Espace entre les images */
     margin-right: 1.5em; /* Espace entre les images */
+    cursor: pointer; /* Curseur en forme de main */
 }
 
 /*=========================================== PUBLICATIONS ==========================================*/
@@ -179,15 +207,86 @@ main {
     padding: 0 7em; /* Espace autour des publications */
     align-items: center; /* Centre les images horizontalement */
     max-width: 65%; /* Limite la largeur maximale à 65% */
+    margin-left: 1em; /* Décalage vers la droite */
+    margin-top: -4em; /* Décalage vers le haut */
+}
+
+/* Conteneur pour chaque publication (en-tête + image) */
+.post-item {
+    width: 100%; /* Prend toute la largeur disponible */
+    display: flex; /* Utilise flexbox */
+    flex-direction: column; /* Aligne en colonne */
+}
+
+/* En-tête de la publication (photo + nom) */
+.post-header {
+    display: flex; /* Utilise flexbox */
+    align-items: center; /* Centre verticalement */
+    gap: 0.75rem; /* Espace entre la photo et le nom */
+    padding: 0.75rem 0; /* Espace en haut et en bas */
+    margin-bottom: 0rem; /* Espace avant l'image */
+    margin-left: 0.7em; /* Décalage vers la droite */
+}
+
+/* Photo de profil dans l'en-tête */
+.post-profile-image {
+    width: 2em; /* Largeur de la photo de profil */
+    height: 2em; /* Hauteur de la photo de profil */
+    border-radius: 50%; /* Forme circulaire */
+    object-fit: cover; /* Recadre l'image */
+}
+
+/* Nom d'utilisateur dans l'en-tête */
+.post-username {
+    font-size: 0.9em; /* Taille de la police */
+    font-weight: 600; /* Poids de la police */
+    color: #262626; /* Couleur du texte */
+    flex: 1; /* Prend tout l'espace disponible */
+}
+
+/* Icône de 3 points dans l'en-tête */
+.post-more-icon {
+    font-size: 1em; /* Taille de l'icône */
+    color: #262626; /* Couleur de l'icône */
+    cursor: pointer; /* Curseur en forme de main */
+    margin-right: 6em; /* Décalage vers la gauche */
 }
 
 /* Styles pour chaque image de publication */
 .post-image {
-    width: 100%; /* L'image prend toute la largeur du conteneur */
+    width: 85%; /* L'image prend toute la largeur du conteneur */
     height: auto; /* Hauteur automatique pour conserver les proportions */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
     align-content: center; /* Centre l'image dans le conteneur */
     border-radius: 0.5em; /* Bords légèrement arrondis */
+}
+
+/* Conteneur des icônes sous la publication */
+.post-actions {
+    display: flex; /* Utilise flexbox */
+    gap: 1rem; /* Espace entre les icônes */
+    padding: 0.75rem 0; /* Espace en haut et en bas */
+    margin-top: 0.5rem; /* Espace après l'image */
+    margin-left: 1em;
+}
+
+/* Icônes d'action (coeur, commentaire, enregistrement) */
+.post-action-icon {
+    font-size: 1.5em; /* Taille des icônes */
+    color: #262626; /* Couleur des icônes */
+    cursor: pointer; /* Curseur en forme de main */
+    transition: color 0.2s ease; /* Animation fluide */
+    margin-top: -0.2em; /* Décalage vers le haut */
+}
+
+/* Icône de sauvegarde */
+.fa-bookmark {
+    margin-left: 13.8em; /* Aligne l'icône de sauvegarde à droite */
+}
+
+/* Effet au survol des icônes */
+.post-action-icon:hover {
+    color: #8e8e8e; /* Couleur grise au survol */
 }
 
 /*=========================================== SUGGESTIONS AMIS ==========================================*/
@@ -209,8 +308,11 @@ main {
     display: flex; /* flex pour pouvoir aligner les suggestions */
     flex-direction: column; /* Aligne les suggestions en colonne */
     gap: 1.5rem; /* Espace entre les suggestions */
-    padding-right: 8em;
+    padding-right: 8em; /* Espace à droite pour éviter le débordement */
     max-width: calc((3.3em + 1.1rem) * 3); /* Limite à 5 images visibles : (largeur image + gap) * 5 */
+    margin-left: -8em; /* Décalage vers la gauche */
+    margin-top: -0.5em; /* Décalage vers le haut */
+    
 }
 
 /* Styles pour l'ensemble des suggestions d'amis */
@@ -222,7 +324,8 @@ main {
     gap: 0.75rem; /* Espace entre les éléments */
     padding: 0.5rem 0; /* Espace en haut et en bas */
     width: 100%; /* Prend toute la largeur disponible */
-    margin-top: -2em; /* Décalage vers le haut */
+    margin-top: -2.3em; /* Décalage vers le haut */
+
 }
 
 /* Styles pour chaque image de suggestion d'ami */
@@ -232,6 +335,7 @@ main {
     border-radius: 50%; /* Forme circulaire */
     object-fit: cover; /* Recadre l'image pour qu'elle remplisse le cercle */
     flex-shrink: 0; /* Empêche les images de rétrécir */
+    margin-bottom: 0.8em; /* Espace en dessous de l'image */
 }
 
 /* Styles pour le nom de chaque suggestion d'ami */
