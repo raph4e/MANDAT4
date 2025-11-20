@@ -8,16 +8,27 @@ const crypto = require('crypto');
 /* Permet au serveur de traiter des données au format Json */
 app.use(express.json());
 
+/* Path permet de gérer les chemins de fichiers */
+const path = require('path');
+
 /* Importe la base de données de db.js */
 const { db, createTable } = require('./db');
 const { default: knex } = require('knex');
 
+/* Créer une route jusque dans le dossier inscription et style */
+app.use(express.static(path.join(__dirname, "../inscription")));
+
+app.use(express.static(path.join(__dirname, "../../style.css")))
+
+app.get('/', (req, res)=> {
+    res.sendFile(path.join(__dirname, "../inscription", "inscription.html"));
+});
 
 /////////////////////////////////////// Création de la base de données ////////////////////////////////
 
 
 /* Créé la table utilisateur puis démarre le serveur */
-createTable().then(() => {
+createTable().then( () => {
 
     /* Vérifie et active le serveur sur le port 3000 */
     app.listen(3000, () => {
@@ -103,3 +114,4 @@ app.post('/loginUser', async (req, res) => {
         res.status(500).json({ error : "Erreur serveur" });
     }
 });
+
