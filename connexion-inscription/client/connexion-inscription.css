@@ -9,12 +9,17 @@ html, body {
     flex-direction: column; 
 }
 
-/* Image background */
+/* Image background et image logo */
 body {
-    background-image: url("image/imageBackground.webp"); 
+    background-image: url("imageBackground.webp");
     background-repeat: no-repeat; 
     background-size: cover; 
     background-position: center; 
+}
+
+.img-instagram {
+    width: 30%;
+    height: 30%;
 }
 
 /* CSS pour le titre */
@@ -47,13 +52,13 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 40em; 
+    max-width: 35em; 
     padding: 1em; 
     box-sizing: border-box; 
 }
 
 .formulaire-connexion {
-    background-color: lightgrey;
+    background-color: white;
     width: 100%;
     max-width: 45em; 
     border-radius: 1em;
@@ -100,6 +105,7 @@ body {
     font-style: normal;
     font-size: 1.2em;
     margin: 1em auto; 
+    background-color: whitesmoke;
 }
 
 .formulaire-champ,

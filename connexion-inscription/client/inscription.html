@@ -7,45 +7,49 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> <!-- Google Fonts -->
-    <link rel="stylesheet" href="../../style.css">
-    <link rel="stylesheet" href="../connexion-inscription.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="connexion-inscription.css">
     <link rel="icon" type="image/png" href="Instagram_logo_rose.svg.png"> <!-- Lien pour afficher l'icône rose d'Instagram dans l'onglet du navigateur -->
-    <title>Se connecter</title>
+    <title>S'inscrire</title>
 </head>
 <body>
     <div class="div-titre-connexion">
-        <p class="titre-connexion">Se connecter</p> 
+        <p class="titre-connexion fa-solid">S'inscrire</p> 
     </div>
     <div class="div-formulaire-connexion">
         <div class="formulaire-connexion">
+            <img src="../../Instagram_logo.svg.png" alt="" class="img-instagram">
             <form action="">
                 <div class="div-champ-label">
-                    <label for="" class="formulaire-champ">Nom d'utilisateur</label>
-                    <input type="text" class="formulaire-champ" placeholder="Entrez votre nom" id="nomUtilisateur" required>
+                    <label for="nomUtilisateur" class="formulaire-champ">Nom d'utilisateur</label>
+                    <input type="text" class="formulaire-champ" placeholder="Créer votre nom d'utilisateur" id="nomUtilisateur">
                     <div class="div-messageErreur">
                         <p id="messageErreurNomUtilisateur"></p>
                     </div>
                 </div>
                 <div class="div-champ-label">
-                    <label for="" class="formulaire-champ">Mot de passe</label>
-                    <input type="password" class="formulaire-champ" placeholder="Entrez votre mot de passe" id="motDePasse" required>
+                    <label for="motDePasse" class="formulaire-champ">Mot de passe</label>
+                    <input type="password" class="formulaire-champ" placeholder="Créer votre mot de passe" id="motDePasse">
                     <div class="div-messageErreur">
                         <p id="messageErreurMotDePasse"></p>
                     </div>
                 </div>
                 <div class="div-champ-label">
                     <div class="bouton-envoyé">
-                            <button id="button-formulaire" class="bouton-champ">Envoyer</button>
-                            <p id="confirmation"></p>
+                        <button id="button-formulaire-inscription" class="bouton-champ">Créer un compte</button>
+                        <p id="confirmation"></p>
+                    </div>
+                    <div>
+                        <p id="confirmationInscription"></p>
                     </div>
                 </div>
-                <div class="pasDeCompte">
-                    <span>Pas de compte?</span>
-                    <a href="../inscription/inscription.html">S'inscrire</a>
+                <div class="dejaUnCompte" id="divPasDeCompte">
+                    <span>Déjà un compte?</span>
+                    <a href="/connexion-inscription/client/connexion.html">Connexion</a>
                 </div>
             </form>
         </div>
     </div>
 </body>
-<script src="../script.js"></script>
+<script src="client-script.js"></script>
 </html>

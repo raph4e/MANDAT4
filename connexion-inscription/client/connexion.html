@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr"> <!-- Accessibilité qui permet aux lecteurs d'écran de comprendre la structure de la page -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design permet d'adapter l'affichage sur différents appareils -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> <!-- Google Fonts -->
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="connexion-inscription.css">
+    <link rel="icon" type="image/png" href="Instagram_logo_rose.svg.png"> <!-- Lien pour afficher l'icône rose d'Instagram dans l'onglet du navigateur -->
+    <title>Se connecter</title>
+</head>
+<body>
+    <div class="div-titre-connexion">
+        <p class="titre-connexion fa-solid">Se connecter</p> 
+    </div>
+    <div class="div-formulaire-connexion">
+        <div class="formulaire-connexion">
+            <img src="../../Instagram_logo.svg.png" alt="" class="img-instagram">
+            <form action="">
+                <div class="div-champ-label">
+                    <label for="nomUtilisateur" class="formulaire-champ">Nom d'utilisateur</label>
+                    <input type="text" class="formulaire-champ" placeholder="Entrez votre nom" id="nomUtilisateur" required>
+                    <div class="div-messageErreur">
+                        <p id="messageErreurNomUtilisateur"></p>
+                    </div>
+                </div>
+                <div class="div-champ-label">
+                    <label for="motDePasse" class="formulaire-champ">Mot de passe</label>
+                    <input type="password" class="formulaire-champ" placeholder="Entrez votre mot de passe" id="motDePasse" required>
+                    <div class="div-messageErreur">
+                        <p id="messageErreurMotDePasse"></p>
+                    </div>
+                </div>
+                <div class="div-champ-label">
+                    <div class="bouton-envoyé">
+                            <button id="button-formulaire-inscription" class="bouton-champ">Envoyer</button>
+                            <p id="confirmation"></p>
+                    </div>
+                </div>
+                <div class="pasDeCompte" id="divPasDeCompte">
+                    <span>Pas de compte?</span>
+                    <a href="inscription.html">S'inscrire</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="client-script.js"></script>
+</html>

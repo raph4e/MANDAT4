@@ -15,13 +15,12 @@ const path = require('path');
 const { db, createTable } = require('./db');
 const { default: knex } = require('knex');
 
-/* Créer une route jusque dans le dossier inscription et style */
-app.use(express.static(path.join(__dirname, "../inscription")));
+/* Route vers la page inscription */
+app.use(express.static(path.join(__dirname, "../../")));
+app.use(express.static(path.join(__dirname, "../client")));
 
-app.use(express.static(path.join(__dirname, "../../style.css")))
-
-app.get('/', (req, res)=> {
-    res.sendFile(path.join(__dirname, "../inscription", "inscription.html"));
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/inscription.html"));
 });
 
 /////////////////////////////////////// Création de la base de données ////////////////////////////////
@@ -43,6 +42,12 @@ createTable().then( () => {
     process.exit(1);
 })
 
+/////////////////////////////////////// Réinitialise la table utilisateurConnecte ///////////////////
+async function viderTable() {
+   await db('utilisateurConnecte').del();
+}
+
+viderTable();
 
 /////////////////////////////////////// Création des requêtes ///////////////////////////////////////
 
@@ -96,13 +101,24 @@ app.post('/loginUser', async (req, res) => {
             console.log("connexion réussi");
 
             /* Renvoie une réponse au client avec l'utilisateur connecté */
-            res.status(201).json(utilisateurConnexion);
+            res.status(200).json(utilisateurConnexion);
 
+            /* Récupère l'id de l'utilisateur connecté */
+            const idUtilisateurConnecte = await db('utilisateur').where({name : name, password : password}).select('id').first();
+
+            /* Supprime l'utilisateur connecté dans la table utilisateurConnecté */
+            await db('utilisateurConnecte').del();
+
+            /* L'ajoute à la table utilisateurConnecté */
+            await db('utilisateurConnecte').insert({id : idUtilisateurConnecte, name : name})
 
         } else {
 
             /* Affiche un message qui indique que la connexion a échoué */
             console.log("nom d'utilisateur ou mot de passe incorrect.");
+
+            /* Envoie une réponse sous forme d'erreur */
+            res.status(401).json({ error: "Nom d'utilisateur ou mot de passe incorrect." }); 
 
         }
     } catch (error) {
@@ -114,4 +130,35 @@ app.post('/loginUser', async (req, res) => {
         res.status(500).json({ error : "Erreur serveur" });
     }
 });
+
+app.get('/getLoginUser', async (req, res) => {
+    try {
+
+        /* Récupère l'utilisateur connecté dans la base de données */
+        const utilisateurConnecte = await db('utilisateurConnecte').select('*');
+
+        /* Vérifie si l'utilisateur connecté existe */
+        if (utilisateurConnecte.length > 0) {
+
+            /* Renvoie l'utilisateur connecté */
+            res.status(200).json(utilisateurConnecte[0])
+            console.log(utilisateurConnecte)
+
+        } else {
+
+            /* Sinon, l'indique */
+            console.log("Aucun utilisateur connecté")
+            res.status(404).json({ error: "Aucun utilisateur connecté" });
+
+        }
+
+    } catch (error) {
+
+        /* Affiche une erreur s'il y a lieu */
+        console.log("Erreur lors de la récupération de l'utilisateur connecté : ", error)
+
+        /* Renvoie une réponse au client */
+        res.status(500).json({ error : "Erreur serveur" });
+    }
+})
 

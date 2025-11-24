@@ -239,3 +239,35 @@ window.onload = async () => { // window.onload permet d'exécuter le code une fo
 
 
 
+//==================================== Lorsqu'un utilisateur clique sur profil ============================
+
+/* Récupère le bouton */
+const boutonConnexionInscription = document.getElementById("boutonConnexionInscription")
+
+boutonConnexionInscription.addEventListener('click', async (e) => {
+
+    /* Préviens le comportement de base */
+    e.preventDefault();
+
+    /* Récupère l'utilisateur connecté si il y a lieu */
+    try {
+        const response = await fetch('/getLoginUser', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+
+        /* Si il y a un utilisateur connecté, redirige vers la page profil. Sinon, vers la page connexion */
+        if (response.ok) {
+            window.location.href = "/connexion-inscription/client/profil.html"
+        } else {
+            window.location.href = "/connexion-inscription/client/connexion.html"
+        }
+
+    } catch (err) {
+
+        /* En cas d'erreur serveur, redirige vers la page connexion */
+        console.error(err)
+        window.location.href = "/connexion-inscription/client/connexion.html"
+    }
+    
+})

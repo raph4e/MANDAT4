@@ -23,8 +23,12 @@ async function createTable() {
             table.string("name").notNullable();
             table.string("password").notNullable();
         });
+        await db.schema.createTable("utilisateurConnecte", (table) => {
+            table.string("id").primary();
+            table.string("name").notNullable();
+        })
         /* Indique la création de la table */
-        console.log("Table 'utilisateur' créé")
+        console.log("Table 'utilisateur' et 'utilisateurConnecte' créé")
     }
 }
 
