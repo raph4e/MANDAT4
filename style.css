@@ -85,45 +85,6 @@ header:hover {
 }
 
 
-
-
-/*=============================== ADAPTION POUR TOUS TYPES D'ÉCRANS ========================================================*/
-
-/* 1. Ajustements pour les tablettes et petits écrans (max 768px) */
-@media screen and (max-width: 768px) { /*@media screen and permet d'appliquer des styles spécifiques aux écrans de cette taille */
-    #logo {
-        height: 2em; /* Taille du logo */
-        margin-bottom: 1rem; /* Espace entre le logo et les liens */
-    }
-
-    .lien {
-        font-size: 1em; /* Texte légèrement plus petit */
-        padding: 0.5rem 0;
-    }
-    
-    .navbar-item {
-        padding: 0.5rem;
-    }
-}
-
-/* 2. Ajustement pour les très petits écrans (max 480px) */
-@media screen and (max-width: 480px) { /*@media screen and permet d'appliquer des styles spécifiques aux écrans de cette taille */
-    #logo {
-        height: 1.5em; /* Taille du logo */
-    }
-
-    .lien {
-        font-size: 0.9em; /* Taille du texte */
-    }
-}
-
-/* 3. Ajustements pour les grands écrans (min 1200px) */
-@media screen and (min-width: 1200px) { /*@media screen and permet d'appliquer des styles spécifiques aux écrans de cette taille */
-    .navbar-item {
-        max-width: 250px; /* la largeur maximale de la navbar */
-    }
-}
-
 /*=============================== RÉINITIALISATION DES STYLES DE BASE (ADAPTION AUX TYPES D'ÉCRANS) ==========================*/
 
 /* Reset de base pour éviter les débordements lorsque la taille de l'écran change */
@@ -417,4 +378,50 @@ main {
 /* Styles pour l'icône des messages */
 .messages-icon {
     font-size: 1.3em; /* Taille de l'icône */
+}
+
+/*=================================== ADAPTATION TOUS TYPES D'ÉCRANS ===================================*/
+@media (max-width: 1200px) {
+    .posts-container {
+        max-width: 80%; /* Augmente la largeur maximale à 80% pour les écrans moyens */
+    }
+    .suggestions-section {
+        display: none; /* Cache la section des suggestions d'amis sur les écrans moyens */
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        width: 100%; /* La navbar prend toute la largeur de l'écran */
+        height: auto; /* Hauteur automatique */
+        position: relative; /* Position relative pour s'adapter au flux */
+    }
+    main {
+        margin-left: 0; /* Supprime le décalage à gauche */
+    }
+    .layout {
+        flex-direction: column; /* Aligne header et main en colonne */
+    }
+    .posts-container {
+        max-width: 100%; /* La largeur maximale est de 100
+% pour les petits écrans */
+        padding: 0 1rem; /* Réduit le padding autour des publications */
+    }
+    .stories-section {
+        padding: 0.5rem; /* Réduit le padding autour des stories */
+    }
+    .stories-container {
+        max-width: 100%; /* La largeur maximale est de 100
+% pour les stories */
+        margin-left: 0; /* Supprime le décalage à gauche */
+        padding-left: 0; /* Supprime le padding à gauche */
+    }
+    .suggestions-section {
+        display: none; /* Cache la section des suggestions d'amis sur les petits écrans */
+    }
+    .messages-badge-section {
+        top: auto; /* Réinitialise la position depuis le haut */
+        bottom: 1rem; /* Position depuis le bas de l'écran */
+        right: 1rem; /* Position depuis la droite de l'écran */
+    }
 }
