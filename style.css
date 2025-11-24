@@ -168,8 +168,9 @@ main {
     padding: 0 7em; /* Espace autour des publications */
     align-items: center; /* Centre les images horizontalement */
     max-width: 65%; /* Limite la largeur maximale à 65% */
-    margin-left: 1em; /* Décalage vers la droite */
+    margin-left: 10em; /* Décalage vers la droite */
     margin-top: -4em; /* Décalage vers le haut */
+    max-height: 50%; /* scale les images pour qu'elles soient moins grandes. */
 }
 
 /* Conteneur pour chaque publication (en-tête + image) */
