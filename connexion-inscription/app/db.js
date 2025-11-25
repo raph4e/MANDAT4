@@ -21,6 +21,7 @@ async function createTable() {
         await db.schema.createTable("utilisateur", (table) => {
             table.string("id").primary();
             table.string("name").notNullable();
+            table.integer("numTel").notNullable();
             table.string("password").notNullable();
         });
         await db.schema.createTable("utilisateurConnecte", (table) => {
