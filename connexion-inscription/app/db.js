@@ -26,9 +26,26 @@ async function createTable() {
         await db.schema.createTable("utilisateurConnecte", (table) => {
             table.string("id").primary();
             table.string("name").notNullable();
+        });
+        await db.schema.createTable("publications", (table) => {
+            table.string("id").primary();
+            table.string("name").notNullable();
+            table.string("image").notNullable();
+            table.string("biographie").notNullable();
+            table.string("idAuteur").notNullable();
+            table.foreign("idAuteur").references("utilisateur.id")
+            table.string("nombreLikes").notNullable();
+        });
+        await db.schema.createTable("commentaires", (table) => {
+            table.string("id").primary();
+            table.string("idAuteur").notNullable();
+            table.foreign("idAuteur").references("utilisateur.id")            
+            table.string("idPublication").notNullable();
+            table.foreign("idPublication").references("publications.id")
+            table.string("message").notNullable();
         })
         /* Indique la création de la table */
-        console.log("Table 'utilisateur' et 'utilisateurConnecte' créé")
+        console.log("Table 'utilisateur', 'utilisateurConnecte', 'publications' et 'commentaires' créé")
     }
 }
 

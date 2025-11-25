@@ -57,12 +57,13 @@ app.post('/addUser', async (req, res) => {
     try {
 
         /* Récupère les infos de la requête */
-        const {name, password} = req.body;
+        const {name, numTel, password} = req.body;
 
         /* Les store dans une variable locale */
         const user = {
             id : crypto.randomUUID(),
             name : name,
+            numTel : numTel,
             password : password
         };
 
@@ -89,7 +90,7 @@ app.post('/loginUser', async (req, res) => {
     try {
 
         /* Récupère les infos de la requête */
-        const {name, password} = req.body;
+        const {name, numTel, password} = req.body;
 
         /* Recherche de l'utilisateur. First() s'assure que qu'il n'y ait qu'un seul résultat à cette recherche */
         const utilisateurConnexion = await db('utilisateur').where({name : name, password : password}).select("*").first();
@@ -110,7 +111,7 @@ app.post('/loginUser', async (req, res) => {
             await db('utilisateurConnecte').del();
 
             /* L'ajoute à la table utilisateurConnecté */
-            await db('utilisateurConnecte').insert({id : idUtilisateurConnecte, name : name})
+            await db('utilisateurConnecte').insert({id : idUtilisateurConnecte, name : name, numTel : numTel})
 
         } else {
 
@@ -131,6 +132,7 @@ app.post('/loginUser', async (req, res) => {
     }
 });
 
+/* Requête permettant de récupérer l'utilisateur connecté */
 app.get('/getLoginUser', async (req, res) => {
     try {
 
@@ -159,6 +161,32 @@ app.get('/getLoginUser', async (req, res) => {
 
         /* Renvoie une réponse au client */
         res.status(500).json({ error : "Erreur serveur" });
+    }
+})
+
+/* Requête qui permet d'ajouter une publication */
+app.post('/addPublication', async (req, res) => {
+    try {
+
+        /* Récupère l'utilisateur connecté dans la base de données qui fait la publication */
+        const idUtilisateurConnecte = await db('utilisateurConnecte').select('id');
+
+        /* Récupère les infos de la publication */
+        const {name, image, biographie} = req.body;
+
+        /* Les store dans une variable */        
+        const publication = {
+            id : crypto.randomUUID(),
+            name : name,
+            idAuteur : idUtilisateurConnecte,
+            nombreDeLikes : 0
+        }
+
+        /* Insère la publication avec les données de la variable locale dans la base de données */
+        await db('publications').insert(publication);
+
+    } catch (error) {
+
     }
 })
 
