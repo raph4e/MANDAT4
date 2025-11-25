@@ -92,6 +92,10 @@ header:hover {
     margin-bottom: 11.8em;
 }
 
+.is-active {
+    font-weight: 800;
+}
+
 
 /*=============================== RÉINITIALISATION DES STYLES DE BASE (ADAPTION AUX TYPES D'ÉCRANS) ==========================*/
 
@@ -245,18 +249,20 @@ main {
     font-size: 1.5em; /* Taille des icônes */
     color: #262626; /* Couleur des icônes */
     cursor: pointer; /* Curseur en forme de main */
-    transition: color 0.2s ease; /* Animation fluide */
     margin-top: -0.2em; /* Décalage vers le haut */
+    border: none; /* Supprime la bordure */
+    background: none;
 }
 
 /* Icône de sauvegarde */
 .fa-bookmark {
-    margin-left: 13.3em; /* Aligne l'icône de sauvegarde à droite */
+    margin-left: 12em; /* Aligne l'icône de sauvegarde à droite */
 }
 
-/* Effet au survol des icônes */
-.post-action-icon:hover {
-    color: #8e8e8e; /* Couleur grise au survol */
+/* Suppression des styles par défaut des boutons */
+.post-more-icon {
+    border: none;
+    background: none;
 }
 
 /*=========================================== SUGGESTIONS AMIS ==========================================*/

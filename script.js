@@ -52,7 +52,7 @@ const LoadImages = async () => { // async function pour charger des images
             userName.classList.add("post-username", "noto-sans-0"); // ajoute une classe CSS au nom
             
             // Icône de 3 points
-            const moreIcon = document.createElement("i"); // crée un élément i pour l'icône
+            const moreIcon = document.createElement("button"); // crée un élément button pour l'icône
             moreIcon.classList.add("fa-solid", "fa-ellipsis", "post-more-icon"); // ajoute des classes CSS à l'icône
             
             // Ajouter la photo et le nom à l'en-tête
@@ -65,6 +65,7 @@ const LoadImages = async () => { // async function pour charger des images
             // définir la taille de l'image
             img.style.width = "28em";
             img.style.height = "36em";
+            img.style.objectFit = "cover"; // pour que l'image garde ses proportions tout en remplissant le conteneur
             img.src = photo.src.large; // vient définir la source de l'image
             img.alt = photo.alt || "Image de l'utilisateur"; // définit le texte alternatif de l'image
             img.classList.add("post-image"); // ajoute une classe CSS à l'image
@@ -74,15 +75,15 @@ const LoadImages = async () => { // async function pour charger des images
             postActions.classList.add("post-actions"); // ajoute une classe CSS au conteneur
             
             // Icône coeur
-            const likeIcon = document.createElement("i"); // crée un élément i pour l'icône coeur
+            const likeIcon = document.createElement("button"); // crée un élément button pour l'icône coeur
             likeIcon.classList.add("fa-regular", "fa-heart", "post-action-icon"); // ajoute des classes CSS à l'icône coeur
             
             // Icône bulle de conversation
-            const commentIcon = document.createElement("i"); // crée un élément i pour l'icône bulle de conversation
+            const commentIcon = document.createElement("button"); // crée un élément button pour l'icône bulle de conversation
             commentIcon.classList.add("fa-regular", "fa-comment", "post-action-icon"); // ajoute des classes CSS à l'icône bulle de conversation
             
             // Icône bookmark
-            const shareIcon = document.createElement("i"); // crée un élément i pour l'icône bookmark
+            const shareIcon = document.createElement("button"); // crée un élément button pour l'icône bookmark
             shareIcon.classList.add("fa-regular", "fa-bookmark", "post-action-icon"); // ajoute des classes CSS à l'icône bookmark
             
             // Ajouter les icônes au conteneur d'actions
@@ -96,6 +97,7 @@ const LoadImages = async () => { // async function pour charger des images
             postItem.appendChild(postActions); // ajoute les icônes d'action au conteneur
             
             document.querySelector(".posts-container").appendChild(postItem); // ajoute la publication au conteneur
+
         });
 
 //----------------------------- suggestions d'amis -------------------------------------------------
