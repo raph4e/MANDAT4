@@ -1,5 +1,7 @@
 //================================== GÉNÉRATION D'IMAGES ET VIDÉOS VIA PEXELS API ==================================//
 
+// À FAIRE : POUVOIR METTRE LE NOMBRE DE LIKES ET DE COMMENTAIRES SUR LES PUBLICATIONS
+
 // Clé API Pexels
 const API_KEY = "YEmthrJDjy7vr7tybv61l9DIASRDocDqYjI7oGn28VdSMphODN3AXMXH";
 
@@ -60,6 +62,9 @@ const LoadImages = async () => { // async function pour charger des images
             
             // Créer l'image de la publication
             const img = document.createElement("img"); // vient créer un élément image en HTML
+            // définir la taille de l'image
+            img.style.width = "28em";
+            img.style.height = "36em";
             img.src = photo.src.large; // vient définir la source de l'image
             img.alt = photo.alt || "Image de l'utilisateur"; // définit le texte alternatif de l'image
             img.classList.add("post-image"); // ajoute une classe CSS à l'image
@@ -228,10 +233,7 @@ const LoadVideos = async () => { // async function pour charger des vidéos
 
 //====================================== CHARGEMENT DU CONTENU DE LA PAGE ==================================
 
-/*
-IL VA FALLOIR TROUVER UNE FONCTION POUR CHARGER ALÉATOIREMENT LES IMAGES ET VIDÉOS (J'AI ESSAYÉ 
-AVEC RANDOM MAIS ÇA NE MARCHAIT PAS)
-*/
+
 window.onload = async () => { // window.onload permet d'exécuter le code une fois que la page est complètement chargée
     await LoadImages(); 
     await LoadVideos(); 

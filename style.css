@@ -53,7 +53,7 @@ header:hover {
 .lien {
     display: flex; /* Utilise Flexbox pour aligner l'icône et le texte */
     align-items: center; /* Centre verticalement les éléments */
-    padding: 1rem 0.4rem; /* Espace intérieur */
+    padding: 1.1rem 0.4rem; /* Espace intérieur */
     text-decoration: none; /* Supprime le soulignement des liens */
     font-size: 0.93em; /* Taille du texte */
     color: #000; /* Couleur du texte */
@@ -82,6 +82,14 @@ header:hover {
   font-weight: 380;
   font-style: normal;
   font-variation-settings: "wdth" 100;
+}
+
+.logo-icon {
+    margin-bottom: 6em ;
+}
+
+#boutonConnexionInscription {
+    margin-bottom: 11.8em;
 }
 
 
@@ -137,7 +145,7 @@ main {
     max-width: calc((6em + 0.8rem) * 6); /* Limite à 6 images visibles : (largeur image + gap) * 6 */
     scroll-behavior: smooth; /* Défilement fluide */
     scrollbar-width: 1em; /* largeur de la scrollbar*/
-    margin-left:3em; /* Décalage vers la droite */
+    margin-left:22em; /* Décalage vers la droite */
     margin-right: -1em; /* Décalage vers la gauche */
 }
 
@@ -168,7 +176,7 @@ main {
     padding: 0 7em; /* Espace autour des publications */
     align-items: center; /* Centre les images horizontalement */
     max-width: 65%; /* Limite la largeur maximale à 65% */
-    margin-left: 10em; /* Décalage vers la droite */
+    margin-left: 20em; /* Décalage vers la droite */
     margin-top: -4em; /* Décalage vers le haut */
     max-height: 50%; /* scale les images pour qu'elles soient moins grandes. */
 }
@@ -211,7 +219,7 @@ main {
     font-size: 1em; /* Taille de l'icône */
     color: #262626; /* Couleur de l'icône */
     cursor: pointer; /* Curseur en forme de main */
-    margin-right: 6em; /* Décalage vers la gauche */
+    margin-right: 33em; /* Décalage vers la gauche */
 }
 
 /* Styles pour chaque image de publication */
@@ -243,7 +251,7 @@ main {
 
 /* Icône de sauvegarde */
 .fa-bookmark {
-    margin-left: 13.8em; /* Aligne l'icône de sauvegarde à droite */
+    margin-left: 13.3em; /* Aligne l'icône de sauvegarde à droite */
 }
 
 /* Effet au survol des icônes */
@@ -259,10 +267,10 @@ main {
     top: 0.5rem; /* Position depuis le haut du contenu */
     right: 2rem; /* Position depuis la droite */
     width: 300px; /* Largeur fixe pour la section */
-    padding: 1rem; /* Espace autour du contenu */
+    padding: 0.8rem; /* Espace autour du contenu */
     background-color: white; /* Fond blanc */
     padding-right: 10em; /* Espace à droite pour éviter le débordement */
-    padding-left: 2em; /* Espace à gauche */
+    margin-left: -20em
 }
 
 /* Conteneur des suggestions d'amis */
@@ -272,8 +280,8 @@ main {
     gap: 1.5rem; /* Espace entre les suggestions */
     padding-right: 8em; /* Espace à droite pour éviter le débordement */
     max-width: calc((3.3em + 1.1rem) * 3); /* Limite à 5 images visibles : (largeur image + gap) * 5 */
-    margin-left: -8em; /* Décalage vers la gauche */
-    margin-top: -0.5em; /* Décalage vers le haut */
+    margin-left: -26em; /* Décalage vers la gauche */
+    margin-top: -0.8em; /* Décalage vers le haut */
     
 }
 
@@ -361,11 +369,11 @@ main {
 /* Conteneur de la pastille de messages */
 .messages-badge-section {
     position: fixed; /* Position fixe pour rester visible lors du défilement */
-    top: 28.5rem; /* Position depuis le haut de l'écran */
-    right: 0.5rem; /* Position depuis la droite de l'écran */
+    top: 53.8rem; /* Position depuis le haut de l'écran */
+    right: 1.8rem; /* Position depuis la droite de l'écran */
     z-index: 1100; /* Au-dessus de la navbar et du contenu */
     box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.18), 0px -2px 6px rgba(0, 0, 0, 0.02); /* Ombre en bas et en haut */
-    padding: 1.2em 8.8em 1.2em 1em; /* Espacement interne */
+    padding: 1em 8em 1em 1em; /* Espacement interne */
     border-radius: 30em; /* Bords arrondis */
 }
 
