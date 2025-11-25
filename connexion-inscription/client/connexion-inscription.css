@@ -113,3 +113,11 @@ body {
     font-size: 1.15em;
     height: 3em;
 }
+
+
+/*=================================== POUR UN NOUVEAU POST =================================== */
+#image {
+    max-width: 20em;
+    max-height: 20em;
+    padding-top: 2em;
+}

@@ -47,7 +47,7 @@ async function viderTable() {
    await db('utilisateurConnecte').del();
 }
 
-viderTable();
+//viderTable();
 
 /////////////////////////////////////// Création des requêtes ///////////////////////////////////////
 
