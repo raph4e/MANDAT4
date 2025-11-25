@@ -90,7 +90,7 @@ app.post('/loginUser', async (req, res) => {
     try {
 
         /* Récupère les infos de la requête */
-        const {name, numTel, password} = req.body;
+        const {name, password} = req.body;
 
         /* Recherche de l'utilisateur. First() s'assure que qu'il n'y ait qu'un seul résultat à cette recherche */
         const utilisateurConnexion = await db('utilisateur').where({name : name, password : password}).select("*").first();
@@ -111,7 +111,7 @@ app.post('/loginUser', async (req, res) => {
             await db('utilisateurConnecte').del();
 
             /* L'ajoute à la table utilisateurConnecté */
-            await db('utilisateurConnecte').insert({id : idUtilisateurConnecte, name : name, numTel : numTel})
+            await db('utilisateurConnecte').insert({id : idUtilisateurConnecte, name : name})
 
         } else {
 
@@ -131,6 +131,38 @@ app.post('/loginUser', async (req, res) => {
         res.status(500).json({ error : "Erreur serveur" });
     }
 });
+
+/* Requête permettant de récupérer le numéro de téléphone de l'utilisateur connecté */
+app.get('/getLoginUserNumTel', async (req, res) => {
+    try {
+        /* Récupère l'id de l'utilisateur connecté */
+        const idUtilisateurConnecte = await db('utilisateurConnecte').select('id').first();
+
+        /* Vérifie si l'utilisateur existe */
+        if (!idUtilisateurConnecte) {
+            return res.status(404).json({ error: "Aucun utilisateur connecté" });
+        }
+
+        /* Récupère le numéro de téléphone correspondant à l'id de l'utilisateur connecté */
+        const numTel = await db('utilisateur').where({id : idUtilisateurConnecte.id}).select('numTel').first();
+
+        /* Vérifie si numTel existe */
+        if (!numTel) {
+            return res.status(404).json({ error: "Numéro introuvable" });
+        }
+
+        /* Renvoie le numéro */
+        res.status(200).json(numTel)
+
+    } catch (error) {
+        
+        /* Affiche une erreur s'il y a lieu */
+        console.log("Erreur lors de la récupération du numéro de téléphone de l'utilisateur connecté : ", error)
+
+        /* Renvoie une réponse au client */
+        res.status(500).json({ error : "Erreur serveur" });
+    }
+})
 
 /* Requête permettant de récupérer l'utilisateur connecté */
 app.get('/getLoginUser', async (req, res) => {
