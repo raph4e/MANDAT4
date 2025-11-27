@@ -47,9 +47,21 @@ async function viderTable() {
    await db('utilisateurConnecte').del();
 }
 
+/* Appel de la fonction */
 viderTable();
 
-/////////////////////////////////////// Création des requêtes ///////////////////////////////////////
+/* Requête permettant de déconnecter un utilisateur (éxécutable depuis le côté client) */
+app.post('/logout', async (req, res) => {
+    try {
+        await db('utilisateurConnecte').del();
+        res.status(200).json({ message: "Déconnexion réussie" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+/////////////////////////////////////// Création des requêtes utilisateurs ///////////////////////////////////////
 
 
 /* Requête permettant de créer un nouvel utilisateur */
@@ -111,7 +123,7 @@ app.post('/loginUser', async (req, res) => {
             await db('utilisateurConnecte').del();
 
             /* L'ajoute à la table utilisateurConnecté */
-            await db('utilisateurConnecte').insert({id : idUtilisateurConnecte, name : name})
+            await db('utilisateurConnecte').insert({id : idUtilisateurConnecte.id, name : name})
 
         } else {
 
@@ -196,6 +208,8 @@ app.get('/getLoginUser', async (req, res) => {
     }
 })
 
+/////////////////////////////////////// Création des requêtes publications ///////////////////////////////////////
+
 /* Requête qui permet d'ajouter une publication */
 app.post('/addPublication', async (req, res) => {
     try {
@@ -222,3 +236,35 @@ app.post('/addPublication', async (req, res) => {
     }
 })
 
+/////////////////////////////////////// Création des requêtes commentaires ///////////////////////////////////////
+
+/* Requête qui permet d'ajouter un commentaire */
+app.post('/addCommentaire', async (req, res) => {
+    try {
+
+        /* Récupère l'utilisateur connecté dans la base de données qui fait la publication */
+        const idAuteur = await db('utilisateurConnecte').select('id');
+
+        /* Récupère les infos de la publication */
+        const message = req.body;
+
+        /* Les store dans une variable */        
+        const commentaire = {
+            id : crypto.randomUUID(),
+            idAuteur : idAuteur.id,
+            idPublication : idPublication,
+            message : message
+        }
+
+        /* Insère la publication avec les données de la variable locale dans la base de données */
+        await db('commentaires').insert(commentaire);
+
+    } catch (error) {
+
+        /* Affiche une erreur s'il y a lieu */
+        console.log("Erreur lors de l'ajout du commentaire : ", error)
+
+        /* Renvoie une réponse au client */
+        res.status(500).json({ error : "Erreur serveur" });
+    }
+})

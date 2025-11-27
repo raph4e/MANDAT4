@@ -81,6 +81,14 @@ boutonInscription.addEventListener("click", async (e) => {
                 /* Affiche un message d'erreur si la connexion a échoué */
                 divPasDeCompte.innerHTML = `<span style="color:red;">${data.error || "Nom d'utilisateur ou mot de passe incorrect."}</span>`;
 
+                /* Redirection vers la page d'accueil */
+                setTimeout(() => {
+                    divPasDeCompte.innerHTML = `
+                        <span>Pas de compte?</span>
+                        <a href="inscription.html">S'inscrire</a>
+                    `
+                }, 2000);
+
                 /* Réinitialise les inputs */
                 nomUtilisateur.value = ""
                 motDePasse.value = ""

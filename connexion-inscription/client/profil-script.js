@@ -1,6 +1,8 @@
 /* Récupère les éléments nécessaires */
 const divNomUtilisateur = document.getElementById("divNomUtilisateur")
 const divNumTel = document.getElementById("divNumTel")
+const boutonSeDeconnecter = document.getElementById("boutonSeDeconnecter")
+const divPasDeCompte = document.getElementById("divPasDeCompte")
 
 /* S'éxécute lorsque la fenêtre est chargé */
 window.onload =  async function() {
@@ -27,8 +29,8 @@ window.onload =  async function() {
         const utilisateurConnexionNumTel = await numResponse.json();
 
         /* Modifie la valeur du texte des deux div pour mettre les informations de l'utilisateur connecté */
-        divNomUtilisateur.innerHTML = `<span class="info-profil">${utilisateurConnexion.name}</span>`;
-        divNumTel.innerHTML = `<span class="info-profil">${utilisateurConnexionNumTel?.numTel || "Numéro non disponible"}</span>`;
+        divNomUtilisateur.innerHTML = `<span class="info-profil formulaire-champ">${utilisateurConnexion.name}</span>`;
+        divNumTel.innerHTML = `<span class="info-profil formulaire-champ">${utilisateurConnexionNumTel?.numTel || "Numéro non disponible"}</span>`;
      
     } catch (err) {
 
@@ -37,4 +39,23 @@ window.onload =  async function() {
         window.location.href = "/connexion-inscription/client/connexion.html"
     }
 
-}
+};
+
+boutonSeDeconnecter.addEventListener("click", async () => {
+
+    /* Appel au serveur pour vider la table */
+    await fetch('/logout', { method: 'POST' });
+
+    /* Vide les div de profil.html */
+    divNomUtilisateur.innerHTML = "";
+    divNumTel.innerHTML = "";
+
+    /* L'indique côté client */
+    divPasDeCompte.innerHTML = `<span style="color:green;">Déconnexion réussie ! Redirection vers la page d'accueil...</span>`
+
+    /* Redirection vers la page d'accueil */
+    setTimeout(() => {
+        window.location.href = "/index.html";
+    }, 2000);
+
+})
