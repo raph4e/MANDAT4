@@ -45,8 +45,17 @@ async function createTable() {
             table.foreign("idPublication").references("publications.id")
             table.string("message").notNullable();
         })
+        await db.schema.createTable("likes", (table) => {
+            table.increments("id").primary();
+            table.string("idUtilisateur").notNullable();
+            table.foreign("idUtilisateur").references("utilisateur.id").onDelete("CASCADE");
+            table.string("idPublication").notNullable();
+            // Pas de clé étrangère car les publications sont générées dynamiquement
+            table.timestamp("dateCreation").defaultTo(db.fn.now());
+            table.unique(["idUtilisateur", "idPublication"]); // Un utilisateur ne peut liker qu'une fois
+        })
         /* Indique la création de la table */
-        console.log("Table 'utilisateur', 'utilisateurConnecte', 'publications' et 'commentaires' créé")
+        console.log("Table 'utilisateur', 'utilisateurConnecte', 'publications', 'commentaires' et 'likes' créé")
     }
 }
 

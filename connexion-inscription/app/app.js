@@ -29,6 +29,9 @@ app.get("/", (req, res) => {
 /* Créé la table utilisateur puis démarre le serveur */
 createTable().then( () => {
 
+    /* Vide la table utilisateurConnecte au démarrage */
+    viderTable();
+
     /* Vérifie et active le serveur sur le port 3000 */
     app.listen(3000, () => {
         console.log("serveur en cours d'exécution sur le port 3000");
@@ -46,9 +49,6 @@ createTable().then( () => {
 async function viderTable() {
    await db('utilisateurConnecte').del();
 }
-
-/* Appel de la fonction */
-viderTable();
 
 /* Requête permettant de déconnecter un utilisateur (éxécutable depuis le côté client) */
 app.post('/logout', async (req, res) => {
@@ -268,3 +268,147 @@ app.post('/addCommentaire', async (req, res) => {
         res.status(500).json({ error : "Erreur serveur" });
     }
 })
+
+/////////////////////////////////////// Création des requêtes likes ///////////////////////////////////////
+
+/*---------------------------------- Requête pour ajouter un like -----------------------------------------------------*/
+app.post('/addLike', async (req, res) => {
+    try {
+        // Récupère l'utilisateur connecté 
+        const utilisateurConnecte = await db('utilisateurConnecte').select('id').first();
+        
+        // si aucun utilisateur connecté, renvoie une erreur
+        if (!utilisateurConnecte) {
+            return res.status(401).json({ error: "Vous devez être connecté pour liker" });
+        }
+
+        // Récupère l'id de la publication depuis le body
+        const { idPublication } = req.body;
+
+        // Vérifie si l'utilisateur a déjà liké cette publication
+        const likeExiste = await db('likes').where({
+            idUtilisateur: utilisateurConnecte.id, // id de l'utilisateur connecté
+            idPublication: idPublication // id de la publication à liker
+        }).first();
+
+        // si l'utilisateur a déjà liké cette publication, renvoie une erreur
+        if (likeExiste) {
+            return res.status(400).json({ error: "Vous avez déjà liké cette publication" });
+        }
+
+        // Ajoute le like
+        await db('likes').insert({
+            idUtilisateur: utilisateurConnecte.id,
+            idPublication: idPublication
+        });
+
+        // Compte le nombre total de likes pour cette publication
+        const nombreLikes = await db('likes').where({ idPublication: idPublication }).count('id as count').first();
+
+        // Renvoie une réponse au client
+        res.status(201).json({ 
+            message: "Like ajouté", 
+            nombreLikes: nombreLikes.count 
+        });
+
+    // En cas d'erreur
+    } catch (error) {
+        console.error("Erreur lors de l'ajout du like : ", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+/*--------------------------------- Requête pour retirer un like ----------------------------------------------*/
+app.delete('/removeLike', async (req, res) => {
+    try {
+        // Récupère l'utilisateur connecté 
+        const utilisateurConnecte = await db('utilisateurConnecte').select('id').first();
+        
+        // si aucun utilisateur connecté, renvoie une erreur
+        if (!utilisateurConnecte) {
+            return res.status(401).json({ error: "Vous devez être connecté" });
+        }
+
+        // Récupère l'id de la publication depuis le body
+        const { idPublication } = req.body;
+
+        // Vérifie si le like existe
+        const likeExiste = await db('likes').where({
+            idUtilisateur: utilisateurConnecte.id, // id de l'utilisateur connecté
+            idPublication: idPublication // id de la publication à retirer le like
+        }).first();
+
+        // si le like n'existe pas, renvoie une erreur
+        if (!likeExiste) {
+            return res.status(404).json({ error: "Vous n'avez pas liké cette publication" });
+        }
+
+        // Supprime le like
+        await db('likes').where({
+            idUtilisateur: utilisateurConnecte.id, // id de l'utilisateur connecté
+            idPublication: idPublication // id de la publication à retirer le like
+        }).del();
+
+        // Compte le nombre total de likes pour cette publication
+        const nombreLikes = await db('likes').where({ idPublication: idPublication }).count('id as count').first();
+
+        // Renvoie une réponse au client
+        res.status(200).json({ 
+            message: "Like retiré", 
+            nombreLikes: nombreLikes.count 
+        });
+
+    // En cas d'erreur
+    } catch (error) {
+        console.error("Erreur lors de la suppression du like : ", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+/*------------------------------ Requête pour vérifier si l'utilisateur a liké une publication --------------------------*/
+app.get('/checkLike/:idPublication', async (req, res) => {
+    try {
+        const utilisateurConnecte = await db('utilisateurConnecte').select('id').first(); // Récupère l'utilisateur connecté
+
+         // si aucun utilisateur connecté, renvoie liked: false
+        if (!utilisateurConnecte) {
+            return res.status(200).json({ liked: false });
+        }
+
+        // Récupère l'id de la publication depuis les paramètres
+        const { idPublication } = req.params;
+
+        // Vérifie si l'utilisateur a liké cette publication
+        const likeExiste = await db('likes').where({
+            idUtilisateur: utilisateurConnecte.id, // id de l'utilisateur connecté
+            idPublication: idPublication // id de la publication à vérifier
+        }).first();
+
+        // Renvoie une réponse au client
+        res.status(200).json({ liked: !!likeExiste });
+
+    // En cas d'erreur
+    } catch (error) {
+        console.error("Erreur lors de la vérification du like : ", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+/*----------------------------- Requête pour obtenir le nombre de likes d'une publication -------------------------*/
+app.get('/getLikes/:idPublication', async (req, res) => {
+    try {
+        // Récupère l'id de la publication depuis les paramètres
+        const { idPublication } = req.params;
+
+        // Compte le nombre de likes depuis la table likes
+        const nombreLikes = await db('likes').where({ idPublication: idPublication }).count('id as count').first();
+
+        // Renvoie une réponse au client
+        res.status(200).json({ nombreLikes: nombreLikes.count });
+
+    // En cas d'erreur
+    } catch (error) {
+        console.error("Erreur lors de la récupération des likes : ", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});

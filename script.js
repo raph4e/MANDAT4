@@ -77,6 +77,7 @@ const LoadImages = async () => { // async function pour charger des images
             // Icône coeur
             const likeIcon = document.createElement("button"); // crée un élément button pour l'icône coeur
             likeIcon.classList.add("fa-regular", "fa-heart", "post-action-icon"); // ajoute des classes CSS à l'icône coeur
+
             
             // Icône bulle de conversation
             const commentIcon = document.createElement("button"); // crée un élément button pour l'icône bulle de conversation
@@ -126,7 +127,7 @@ const LoadImages = async () => { // async function pour charger des images
             
             
             // Ajoute l'image et le nom au conteneur
-            suggestionItem.appendChild(img);
+            suggestionItem.appendChild(img); 
             suggestionItem.appendChild(userName);
             suggestionItem.appendChild(followLink);
             
@@ -241,6 +242,81 @@ window.onload = async () => { // window.onload permet d'exécuter le code une fo
     await LoadVideos(); 
 }
 
+
+//====================================== GESTION DES LIKES ====================================
+
+// Fonction pour liker/unliker une publication
+async function toggleLike(idPublication, likeIcon) {
+    try {
+        // Vérifie si déjà liké
+        const checkResponse = await fetch(`/checkLike/${encodeURIComponent(idPublication)}`); // encodeURIComponent pour s'assurer que l'ID est correctement encodé dans l'URL
+        
+        // si la réponse n'est pas ok, lance une erreur
+        if (!checkResponse.ok) {
+            throw new Error('Erreur de connexion au serveur');
+        }
+        
+        // Récupère les données de la réponse et les convertit en JSON
+        const checkData = await checkResponse.json();
+
+        // si la publication est déjà likée
+        if (checkData.liked) {
+            // Retirer le like
+            const response = await fetch('/removeLike', { // envoie une requête pour retirer le like
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idPublication }) // envoie l'ID de la publication à retirer
+            });
+            
+            // si la réponse est ok
+            if (response.ok) {
+                // Change l'icône en cœur vide
+                likeIcon.classList.remove('fa-solid'); // retire la classe du coeur plein
+                likeIcon.classList.add('fa-regular'); // ajoute la classe du coeur vide
+                console.log('Like retiré');
+            } else {
+                const errorData = await response.json(); // récupère les données d'erreur
+                console.error('Erreur:', errorData); // affiche l'erreur dans la console
+                alert(errorData.error || 'Erreur lors du retrait du like');
+            }
+            
+        } else {
+            // Ajouter le like
+            const response = await fetch('/addLike', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idPublication })
+            });
+            
+            // si la réponse est ok
+            if (response.ok) {
+                // Change l'icône en cœur plein
+                likeIcon.classList.remove('fa-regular'); // retire la classe du coeur vide
+                likeIcon.classList.add('fa-solid'); // ajoute la classe du coeur plein
+                console.log('Like ajouté');
+            } else {
+                const errorData = await response.json(); // récupère les données d'erreur
+                console.error('Erreur:', errorData); // affiche l'erreur dans la console
+                alert(errorData.error || 'Erreur lors de l\'ajout du like');
+            }
+        }
+    // En cas d'erreur
+    } catch (error) {
+        console.error('Erreur lors du toggle like:', error);
+        alert('Vous devez être connecté pour liker');
+    }
+}
+
+// Écoute les clics sur les icônes de like
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('fa-heart')) { // vérifie si l'élément cliqué est une icône de coeur
+        const postItem = e.target.closest('.post-item'); // trouve l'élément parent le plus proche avec la classe 'post-item'
+        const postMedia = postItem.querySelector('.post-image'); // récupère l'image ou la vidéo de la publication
+        const idPublication = postMedia.src; // Utilise l'URL comme ID temporaire
+        
+        toggleLike(idPublication, e.target); // appelle la fonction toggleLike avec l'ID de la publication et l'icône cliquée
+    }
+});
 
 
 //==================================== Lorsqu'un utilisateur clique sur profil ============================
