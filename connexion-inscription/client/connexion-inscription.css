@@ -1,20 +1,20 @@
 /* Suppression des marges et paddings de base, alignement par défaut des éléments */
-html, body {
-    height: 100%; 
-    margin: 0; 
-    padding: 0; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    flex-direction: column; 
+html,
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 /* Image background et image logo */
 body {
     background-image: url("imageBackground.webp");
-    background-repeat: no-repeat; 
-    background-size: cover; 
-    background-position: center; 
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
 .img-instagram {
@@ -25,14 +25,14 @@ body {
 /* CSS pour le titre */
 .div-titre-connexion {
     width: 100%;
-    max-width: 40em; 
-    height: auto; 
+    max-width: 40em;
+    height: auto;
     padding: 0;
-    margin: 0 auto 1em auto; 
+    margin: 0 auto 1em auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center; 
+    text-align: center;
 }
 
 
@@ -41,9 +41,9 @@ body {
     font-optical-sizing: auto;
     font-weight: 380;
     font-style: normal;
-    font-size: 4em; 
+    font-size: 4em;
     text-align: center;
-    margin: 0; 
+    margin: 0;
 }
 
 /* CSS pour le formulaire */
@@ -52,23 +52,23 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 35em; 
-    padding: 1em; 
-    box-sizing: border-box; 
+    max-width: 35em;
+    padding: 1em;
+    box-sizing: border-box;
 }
 
 .formulaire-connexion {
     background-color: white;
     width: 100%;
-    max-width: 45em; 
+    max-width: 45em;
     border-radius: 1em;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 3.5em;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-    box-sizing: border-box; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
 }
 
 /* CSS pour les champs du formulaire */
@@ -79,24 +79,24 @@ body {
     font-weight: 380;
     font-style: normal;
     font-size: 1.2em;
-    width: 100%; 
-    max-width: 35em; 
-    margin: 0.5em 0; 
-    padding: 0.5em; 
-    box-sizing: border-box; 
+    width: 100%;
+    max-width: 35em;
+    margin: 0.5em 0;
+    padding: 0.5em;
+    box-sizing: border-box;
 }
 
 .div-champ-label {
-    width: 100%; 
-    max-width: 25em; 
-    margin: 1em 0; 
-    text-align: left; 
+    width: 100%;
+    max-width: 25em;
+    margin: 1em 0;
+    text-align: left;
 }
 
 /* CSS pour le bouton du formulaire */
 .bouton-champ {
-    width: 100%; 
-    max-width: 20em; 
+    width: 100%;
+    max-width: 20em;
     border-radius: 0.3em;
     height: 3.2em;
     font-family: "Noto Sans", sans-serif;
@@ -104,8 +104,9 @@ body {
     font-weight: 380;
     font-style: normal;
     font-size: 1.2em;
-    margin: 1em auto; 
+    margin: 1em auto;
     background-color: whitesmoke;
+    margin-bottom: 0;
 }
 
 .formulaire-champ,
@@ -116,8 +117,92 @@ body {
 
 
 /*=================================== POUR UN NOUVEAU POST =================================== */
+#fichier {
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 380;
+    font-style: normal;
+    font-size: 1.2em;
+    margin-top: 0;
+}
+
 #image {
     max-width: 20em;
     max-height: 20em;
-    padding-top: 2em;
+    padding: 1em;
+    margin: auto;
+    display: flex;
+}
+
+.div-description {
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 380;
+    font-style: normal;
+    font-size: 1.2em;
+    margin-bottom: 0;
+}
+
+#desc {
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    padding: 0.5em;
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 350;
+    font-style: normal;
+    font-size: 1em;
+    margin-bottom: 0;
+    max-width: 20em;
+    margin-top: 0.2em;
+}
+
+
+/* CSS pour le titre */
+.div-titre-publication {
+    width: 100%;
+    max-width: 40em;
+    height: auto;
+    padding: 0;
+    margin: 0 auto 1em auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+.titre-publication {
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 380;
+    font-style: normal;
+    font-size: 4em;
+    text-align: center;
+    margin: 0;
+}
+
+#confirmationInscription{
+    margin: 1em;
+    padding: 0;
+}
+
+.error {
+    color: red;
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 380;
+    font-style: normal;
+    font-size: 1em;
+    text-align: left;
+}
+
+.confirm {
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 380;
+    font-style: normal;
+    font-size: 1em;
+    color: #1bbe13;
 }

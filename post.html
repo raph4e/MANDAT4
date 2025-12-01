@@ -13,30 +13,28 @@
     <title>Nouvelle publication</title>
 </head>
 <body>
-    <div class="div-titre-connexion">
-        <p class="titre-connexion">Créer une nouvelle publication</p> 
+    <div class="div-titre-publication">
+        <p class="titre-publication">Créer une nouvelle publication</p> 
     </div>
     <div class="div-formulaire-connexion">
         <div class="formulaire-connexion">
             <form action="">
                 <div class="div-champ-label">
-                    <input class="" type="file" accept="image/*" id="fichier">
+                    <input type="file" accept="image/*" id="fichier">
                     <img id="image">
                 </div>
-                <div class="div-champ-label">
+                <div class="div-description">
                     <label for="desc">Description de votre publication</label>
-                    <textarea name="Description" rows="5" cols="43" id="desc"></textarea> 
+                    <!--Gère la description, rows & cols dicte la grandeur de la boite de texte-->
+                    <textarea name="Description" rows="5" cols="33" id="desc"></textarea> 
                 </div>
                 <div class="div-champ-label">
                     
                 </div>
                 <div class="div-champ-label">
-                    <div class="bouton-envoyé">
-                        <button id="button-formulaire-inscription" class="bouton-champ">Créer la publication</button>
-                        <p id="confirmation"></p>
-                    </div>
-                    <div>
-                        <p id="confirmationInscription"></p>
+                    <div class="bouttonSend">
+                        <button id="button-formulaire-post" class="bouton-champ">Créer la publication</button>
+                        <p id="confirmationPost"></p>
                     </div>
                 </div>
             </form>
