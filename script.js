@@ -351,3 +351,49 @@ boutonConnexionInscription.addEventListener('click', async (e) => {
     }
     
 })
+//====================================Barre de recherche============================
+const btnSearch = document.getElementById("btnSearch");
+const searchBox = document.getElementById("searchBox");
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+
+// Gère l'affichage de la barre de recherche et les recherches d'utilisateurs
+btnSearch.addEventListener("click", () => {
+    searchBox.style.display = searchBox.style.display === "block" ? "none" : "block";
+    searchInput.value = "";
+    searchResults.innerHTML = "";
+});
+
+// Ferme la barre de recherche si on clique en dehors
+document.addEventListener("click", (event) => {
+    if (!searchBox.contains(event.target) && event.target !== btnSearch) {
+        searchBox.style.display = "none";
+        searchInput.value = "";
+        searchResults.innerHTML = "";
+    }
+});
+// Gère la recherche d'utilisateurs au fur et à mesure de la saisie
+searchInput.addEventListener("input", async () => {
+    const query = searchInput.value.trim();
+    if (query.length === 0) {
+        searchResults.innerHTML = "";
+        return;
+    }
+    try {
+        const response = await fetch(`/searchUsers?query=${encodeURIComponent(query)}`);
+        if (response.ok) {
+            const users = await response.json();
+            searchResults.innerHTML = "";
+            users.forEach(user => {
+                const userDiv = document.createElement("div");
+                userDiv.classList.add("search-result-item");
+                userDiv.textContent = user.username;
+                searchResults.appendChild(userDiv);
+            });
+        } else {
+            console.error("Erreur lors de la recherche d'utilisateurs");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la recherche d'utilisateurs:", error);
+    }
+});
