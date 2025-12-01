@@ -24,7 +24,7 @@
                     <a href="index.html" class="lien is-active"><i class="fa-solid fa-house nav-icon" aria-hidden="true"></i>Accueil</a> <!-- Icône de maison pour le lien Accueil -->
                     <a href="" class="lien"><i class="fa-solid fa-video nav-icon" aria-hidden="true"></i>Reels</a> <!-- Icône de vidéo pour le lien Reels -->
                     <a href="" class="lien"><i class="fa-solid fa-paper-plane nav-icon" aria-hidden="true"></i>Messages</a> <!-- Icône d'avion en papier pour le lien Messages -->
-                    <a href="" class="lien"><i class="fa-solid fa-magnifying-glass nav-icon" aria-hidden="true"></i>Recherche</a> <!-- Icône de loupe pour le lien Recherche -->
+                    <a href="#" id="btnSearch" class="lien"><i class="fa-solid fa-magnifying-glass nav-icon"></i>Recherche</a><!-- Icône de loupe pour le lien Recherche -->
                     <a href="" class="lien"><i class="fa-solid fa-compass nav-icon" aria-hidden="true"></i>Découvrir</a> <!-- Icône de boussole pour le lien Découvrir -->
                     <a href="" class="lien"><i class="fa-solid fa-heart nav-icon" aria-hidden="true"></i>Notifications</a> <!-- Icône de cœur pour le lien Notifications -->
                     <a href="" class="lien"><i class="fa-solid fa-plus nav-icon" aria-hidden="true"></i>Créer</a> <!-- Icône de plus pour le lien Créer -->
@@ -34,6 +34,12 @@
                 </div>
             </nav>
         </header>
+<!---------------------------------------- Conteneur de la bare de recherche ----------------------------------------->
+<div id="searchBox" class="search-box">
+    <input type="text" id="searchInput" placeholder="Rechercher un utilisateur…">
+    <div id="searchResults" class="search-results"></div>
+</div>
+
 <!---------------------------------------- CONTENU PRINCIPAL (MAIN)----------------------------------------------->
         <main>
 <!--------------------------------- Conteneur pour les stories ----------------------------------->
