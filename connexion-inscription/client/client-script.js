@@ -3,6 +3,7 @@ const boutonInscription = document.getElementById("button-formulaire-inscription
 const nomUtilisateur = document.getElementById("nomUtilisateur")
 const motDePasse = document.getElementById("motDePasse")
 const divPasDeCompte = document.getElementById("divPasDeCompte")
+const numTelephone = document.getElementById("numTelephone")
 
 /* Ajoute un utilisateur à la base de données lorsque que le bouton pour s'inscrire est cliqué */
 boutonInscription.addEventListener("click", async (e) => {
@@ -19,12 +20,14 @@ boutonInscription.addEventListener("click", async (e) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name : nomUtilisateur.value,
+                numTel : numTelephone.value,
                 password : motDePasse.value
             })
         })
 
         /* Réinitialise les inputs */
         nomUtilisateur.value = ""
+        numTelephone.value = ""
         motDePasse.value = ""
 
         /* Message de confirmation et redirection vers la page connexion.html */
@@ -62,7 +65,6 @@ boutonInscription.addEventListener("click", async (e) => {
 
             /* Store dans une variable */
             if (response.ok) {
-                const utilisateurConnecte = await response.json();
 
                 /* Indique que la connexion a réussie */
                 divPasDeCompte.innerHTML = `<span style="color:green;">Connexion réussie ! Redirection...</span>`;
@@ -71,11 +73,21 @@ boutonInscription.addEventListener("click", async (e) => {
                 setTimeout(() => {
                     window.location.href = "/index.html"; 
                 }, 2000);
+
             } else {
+
                 const data = await response.json();
 
                 /* Affiche un message d'erreur si la connexion a échoué */
                 divPasDeCompte.innerHTML = `<span style="color:red;">${data.error || "Nom d'utilisateur ou mot de passe incorrect."}</span>`;
+
+                /* Redirection vers la page d'accueil */
+                setTimeout(() => {
+                    divPasDeCompte.innerHTML = `
+                        <span>Pas de compte?</span>
+                        <a href="inscription.html">S'inscrire</a>
+                    `
+                }, 2000);
 
                 /* Réinitialise les inputs */
                 nomUtilisateur.value = ""

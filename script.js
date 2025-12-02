@@ -1,5 +1,7 @@
 //================================== GÉNÉRATION D'IMAGES ET VIDÉOS VIA PEXELS API ==================================//
 
+// À FAIRE : POUVOIR METTRE LE NOMBRE DE LIKES ET DE COMMENTAIRES SUR LES PUBLICATIONS
+
 // Clé API Pexels
 const API_KEY = "YEmthrJDjy7vr7tybv61l9DIASRDocDqYjI7oGn28VdSMphODN3AXMXH";
 
@@ -50,7 +52,7 @@ const LoadImages = async () => { // async function pour charger des images
             userName.classList.add("post-username", "noto-sans-0"); // ajoute une classe CSS au nom
             
             // Icône de 3 points
-            const moreIcon = document.createElement("i"); // crée un élément i pour l'icône
+            const moreIcon = document.createElement("button"); // crée un élément button pour l'icône
             moreIcon.classList.add("fa-solid", "fa-ellipsis", "post-more-icon"); // ajoute des classes CSS à l'icône
             
             // Ajouter la photo et le nom à l'en-tête
@@ -60,6 +62,10 @@ const LoadImages = async () => { // async function pour charger des images
             
             // Créer l'image de la publication
             const img = document.createElement("img"); // vient créer un élément image en HTML
+            // définir la taille de l'image
+            img.style.width = "28em";
+            img.style.height = "36em";
+            img.style.objectFit = "cover"; // pour que l'image garde ses proportions tout en remplissant le conteneur
             img.src = photo.src.large; // vient définir la source de l'image
             img.alt = photo.alt || "Image de l'utilisateur"; // définit le texte alternatif de l'image
             img.classList.add("post-image"); // ajoute une classe CSS à l'image
@@ -69,15 +75,116 @@ const LoadImages = async () => { // async function pour charger des images
             postActions.classList.add("post-actions"); // ajoute une classe CSS au conteneur
             
             // Icône coeur
-            const likeIcon = document.createElement("i"); // crée un élément i pour l'icône coeur
+            const likeIcon = document.createElement("button"); // crée un élément button pour l'icône coeur
             likeIcon.classList.add("fa-regular", "fa-heart", "post-action-icon"); // ajoute des classes CSS à l'icône coeur
+
             
             // Icône bulle de conversation
-            const commentIcon = document.createElement("i"); // crée un élément i pour l'icône bulle de conversation
+            const commentIcon = document.createElement("button"); // crée un élément button pour l'icône bulle de conversation
             commentIcon.classList.add("fa-regular", "fa-comment", "post-action-icon"); // ajoute des classes CSS à l'icône bulle de conversation
             
+            // S'éxécute lorsque quelqu'un clique sur commentaire 
+            commentIcon.addEventListener('click', async ()=> {
+
+                // Récupère l'utilisateur connecté
+                const response = await fetch('/getLoginUser')
+
+                if(!response.ok) {
+
+                    // Désactive le bouton commentaire
+                    commentIcon.disabled = true
+
+                    // Indique au client qu'il faut être connecté pour écrire un commentaire
+                    const messageErreur = document.createElement("p")
+                    messageErreur.textContent = "Il faut être connecté pour écrire un commentaire"
+
+                    // Style pour le message erreur
+                    messageErreur.style.color = "red"
+                    messageErreur.style.marginLeft = "1.5em"
+
+                    // L'ajoute au HTML
+                    postItem.appendChild(messageErreur)
+
+                    // Attends 2 secondes puis supprime le message 
+                    setTimeout(() => {
+                        messageErreur.remove();
+                        commentIcon.disabled = false
+                    }, 2000);                    
+
+                    // Arrête le bloc de code
+                    return;
+                }
+
+                // Récupère l'utilisateur connecté
+                const loginUser = await response.json();
+
+                // Désactive le bouton commentaire 
+                commentIcon.disabled = true
+
+                // Créer le textarea qui permet l'écriture du commentaire
+                const commentaire = document.createElement("textarea")
+                commentaire.placeholder = "Écrivez votre commentaire ici..."
+
+                // Style pour le textarea
+                commentaire.style.width = "24em"
+                commentaire.style.height = "7em"
+                commentaire.style.marginTop = "1em"
+                commentaire.style.marginLeft = "1.5em"      
+
+                // Créer le bouton envoyer
+                const boutonEnvoyer = document.createElement("button")
+                boutonEnvoyer.textContent = "Envoyer"
+
+                // S'éxécute lorsque le bouton envoyer est cliqué
+                boutonEnvoyer.addEventListener('click', async ()=> {
+
+                    // conteneur qui met côte à côte
+                    const ligneCommentaire = document.createElement("div");
+                    ligneCommentaire.style.display = "flex";
+                    ligneCommentaire.style.flexDirection = "row";
+                    ligneCommentaire.style.gap = "0.5em";                  
+
+                    // Affiche l'utilisateur
+                    const utilisateurCommentaire = document.createElement("p")
+                    utilisateurCommentaire.textContent = loginUser.name;
+
+                    // Style pour utilisateurCommentaire
+                    utilisateurCommentaire.style.fontWeight = "bold";
+                    utilisateurCommentaire.style.marginLeft = "1.5em"
+
+                    // Affiche le commentaire
+                    const contenuCommentaire = document.createElement("p")
+                    contenuCommentaire.textContent = commentaire.value;
+
+                    // Style pour contenu commentaire
+                    contenuCommentaire.style.marginLeft = "0.5em"
+
+                    // Ajoute le contenu au HTML
+                    ligneCommentaire.appendChild(utilisateurCommentaire)
+                    ligneCommentaire.appendChild(contenuCommentaire)
+                    postItem.appendChild(ligneCommentaire)
+
+                    // Supprime le textarea et le bouton
+                    commentaire.remove();
+                    boutonEnvoyer.remove();
+
+                    // Réactive le bouton commentaire 
+                    commentIcon.disabled = false
+                })
+
+                // Style pour le bouton envoyer
+                boutonEnvoyer.style.marginTop = "2em"
+                boutonEnvoyer.style.width = "12em"
+                boutonEnvoyer.style.marginLeft = "1.5em"   
+
+                // Les ajoute au HTML
+                postItem.appendChild(commentaire)
+                postItem.appendChild(boutonEnvoyer)
+                
+            })
+            
             // Icône bookmark
-            const shareIcon = document.createElement("i"); // crée un élément i pour l'icône bookmark
+            const shareIcon = document.createElement("button"); // crée un élément button pour l'icône bookmark
             shareIcon.classList.add("fa-regular", "fa-bookmark", "post-action-icon"); // ajoute des classes CSS à l'icône bookmark
             
             // Ajouter les icônes au conteneur d'actions
@@ -91,6 +198,7 @@ const LoadImages = async () => { // async function pour charger des images
             postItem.appendChild(postActions); // ajoute les icônes d'action au conteneur
             
             document.querySelector(".posts-container").appendChild(postItem); // ajoute la publication au conteneur
+
         });
 
 //----------------------------- suggestions d'amis -------------------------------------------------
@@ -119,7 +227,7 @@ const LoadImages = async () => { // async function pour charger des images
             
             
             // Ajoute l'image et le nom au conteneur
-            suggestionItem.appendChild(img);
+            suggestionItem.appendChild(img); 
             suggestionItem.appendChild(userName);
             suggestionItem.appendChild(followLink);
             
@@ -204,6 +312,106 @@ const LoadVideos = async () => { // async function pour charger des vidéos
             // Icône bulle de conversation
             const commentIcon = document.createElement("i"); // crée un élément i pour l'icône bulle de conversation
             commentIcon.classList.add("fa-regular", "fa-comment", "post-action-icon"); // ajoute des classes CSS à l'icône bulle de conversation
+
+            // S'éxécute lorsque quelqu'un clique sur commentaire 
+            commentIcon.addEventListener('click', async ()=> {
+
+                // Récupère l'utilisateur connecté
+                const response = await fetch('/getLoginUser')
+
+                if(!response.ok) {
+
+                    // Désactive le bouton commentaire
+                    commentIcon.disabled = true
+
+                    // Indique au client qu'il faut être connecté pour écrire un commentaire
+                    const messageErreur = document.createElement("p")
+                    messageErreur.textContent = "Il faut être connecté pour écrire un commentaire"
+
+                    // Style pour le message erreur
+                    messageErreur.style.color = "red"
+                    messageErreur.style.marginLeft = "1.5em"
+
+                    // L'ajoute au HTML
+                    postItem.appendChild(messageErreur)
+
+                    // Attends 2 secondes puis supprime le message 
+                    setTimeout(() => {
+                        messageErreur.remove();
+                        commentIcon.disabled = false
+                    }, 2000);                    
+
+                    // Arrête le bloc de code
+                    return;
+                }
+
+                // Récupère l'utilisateur connecté
+                const loginUser = await response.json();
+
+                // Désactive le bouton commentaire 
+                commentIcon.disabled = true
+
+                // Créer le textarea qui permet l'écriture du commentaire
+                const commentaire = document.createElement("textarea")
+                commentaire.placeholder = "Écrivez votre commentaire ici..."
+
+                // Style pour le textarea
+                commentaire.style.width = "24em"
+                commentaire.style.height = "7em"
+                commentaire.style.marginTop = "1em"
+                commentaire.style.marginLeft = "1.5em"      
+
+                // Créer le bouton envoyer
+                const boutonEnvoyer = document.createElement("button")
+                boutonEnvoyer.textContent = "Envoyer"
+
+                // S'éxécute lorsque le bouton envoyer est cliqué
+                boutonEnvoyer.addEventListener('click', async ()=> {
+
+                    // conteneur qui met côte à côte
+                    const ligneCommentaire = document.createElement("div");
+                    ligneCommentaire.style.display = "flex";
+                    ligneCommentaire.style.flexDirection = "row";
+                    ligneCommentaire.style.gap = "0.5em";                  
+
+                    // Affiche l'utilisateur
+                    const utilisateurCommentaire = document.createElement("p")
+                    utilisateurCommentaire.textContent = loginUser.name;
+
+                    // Style pour utilisateurCommentaire
+                    utilisateurCommentaire.style.fontWeight = "bold";
+                    utilisateurCommentaire.style.marginLeft = "1.5em"
+
+                    // Affiche le commentaire
+                    const contenuCommentaire = document.createElement("p")
+                    contenuCommentaire.textContent = commentaire.value;
+
+                    // Style pour contenu commentaire
+                    contenuCommentaire.style.marginLeft = "0.5em"
+
+                    // Ajoute le contenu au HTML
+                    ligneCommentaire.appendChild(utilisateurCommentaire)
+                    ligneCommentaire.appendChild(contenuCommentaire)
+                    postItem.appendChild(ligneCommentaire)
+
+                    // Supprime le textarea et le bouton
+                    commentaire.remove();
+                    boutonEnvoyer.remove();
+
+                    // Réactive le bouton commentaire 
+                    commentIcon.disabled = false
+                })
+
+                // Style pour le bouton envoyer
+                boutonEnvoyer.style.marginTop = "2em"
+                boutonEnvoyer.style.width = "12em"
+                boutonEnvoyer.style.marginLeft = "1.5em"   
+
+                // Les ajoute au HTML
+                postItem.appendChild(commentaire)
+                postItem.appendChild(boutonEnvoyer)
+                
+            })
             
             // Icône bookmark
             const shareIcon = document.createElement("i"); // crée un élément i pour le bookmark
@@ -228,15 +436,87 @@ const LoadVideos = async () => { // async function pour charger des vidéos
 
 //====================================== CHARGEMENT DU CONTENU DE LA PAGE ==================================
 
-/*
-IL VA FALLOIR TROUVER UNE FONCTION POUR CHARGER ALÉATOIREMENT LES IMAGES ET VIDÉOS (J'AI ESSAYÉ 
-AVEC RANDOM MAIS ÇA NE MARCHAIT PAS)
-*/
+
 window.onload = async () => { // window.onload permet d'exécuter le code une fois que la page est complètement chargée
     await LoadImages(); 
     await LoadVideos(); 
 }
 
+
+//====================================== GESTION DES LIKES ====================================
+
+// Fonction pour liker/unliker une publication
+async function toggleLike(idPublication, likeIcon) {
+    try {
+        // Vérifie si déjà liké
+        const checkResponse = await fetch(`/checkLike/${encodeURIComponent(idPublication)}`); // encodeURIComponent pour s'assurer que l'ID est correctement encodé dans l'URL
+        
+        // si la réponse n'est pas ok, lance une erreur
+        if (!checkResponse.ok) {
+            throw new Error('Erreur de connexion au serveur');
+        }
+        
+        // Récupère les données de la réponse et les convertit en JSON
+        const checkData = await checkResponse.json();
+
+        // si la publication est déjà likée
+        if (checkData.liked) {
+            // Retirer le like
+            const response = await fetch('/removeLike', { // envoie une requête pour retirer le like
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idPublication }) // envoie l'ID de la publication à retirer
+            });
+            
+            // si la réponse est ok
+            if (response.ok) {
+                // Change l'icône en cœur vide
+                likeIcon.classList.remove('fa-solid'); // retire la classe du coeur plein
+                likeIcon.classList.add('fa-regular'); // ajoute la classe du coeur vide
+                console.log('Like retiré');
+            } else {
+                const errorData = await response.json(); // récupère les données d'erreur
+                console.error('Erreur:', errorData); // affiche l'erreur dans la console
+                alert(errorData.error || 'Erreur lors du retrait du like');
+            }
+            
+        } else {
+            // Ajouter le like
+            const response = await fetch('/addLike', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idPublication })
+            });
+            
+            // si la réponse est ok
+            if (response.ok) {
+                // Change l'icône en cœur plein
+                likeIcon.classList.remove('fa-regular'); // retire la classe du coeur vide
+                likeIcon.classList.add('fa-solid'); // ajoute la classe du coeur plein
+                console.log('Like ajouté');
+            } else {
+                const errorData = await response.json(); // récupère les données d'erreur
+                console.error('Erreur:', errorData); // affiche l'erreur dans la console
+                alert(errorData.error || 'Erreur lors de l\'ajout du like');
+            }
+        }
+    // En cas d'erreur
+    } catch (error) {
+        console.error('Erreur lors du toggle like:', error);
+        alert('Vous devez être connecté pour liker');
+    }
+}
+
+// Écoute les clics sur les icônes de like
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('fa-heart')) { // vérifie si l'élément cliqué est une icône de coeur
+        const postItem = e.target.closest('.post-item'); // trouve l'élément parent le plus proche avec la classe 'post-item'
+        const postMedia = postItem.querySelector('.post-image'); // récupère l'image ou la vidéo de la publication
+        const idPublication = postMedia.src; // Utilise l'URL comme ID temporaire
+        
+        toggleLike(idPublication, e.target); // appelle la fonction toggleLike avec l'ID de la publication et l'icône cliquée
+    }
+});
 
 
 //==================================== Lorsqu'un utilisateur clique sur profil ============================
@@ -271,3 +551,49 @@ boutonConnexionInscription.addEventListener('click', async (e) => {
     }
     
 })
+//====================================Barre de recherche============================
+const btnSearch = document.getElementById("btnSearch");
+const searchBox = document.getElementById("searchBox");
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+
+// Gère l'affichage de la barre de recherche et les recherches d'utilisateurs
+btnSearch.addEventListener("click", () => {
+    searchBox.style.display = searchBox.style.display === "block" ? "none" : "block";
+    searchInput.value = "";
+    searchResults.innerHTML = "";
+});
+
+// Ferme la barre de recherche si on clique en dehors
+document.addEventListener("click", (event) => {
+    if (!searchBox.contains(event.target) && event.target !== btnSearch) {
+        searchBox.style.display = "none";
+        searchInput.value = "";
+        searchResults.innerHTML = "";
+    }
+});
+// Gère la recherche d'utilisateurs au fur et à mesure de la saisie
+searchInput.addEventListener("input", async () => {
+    const query = searchInput.value.trim();
+    if (query.length === 0) {
+        searchResults.innerHTML = "";
+        return;
+    }
+    try {
+        const response = await fetch(`/searchUsers?query=${encodeURIComponent(query)}`);
+        if (response.ok) {
+            const users = await response.json();
+            searchResults.innerHTML = "";
+            users.forEach(user => {
+                const userDiv = document.createElement("div");
+                userDiv.classList.add("search-result-item");
+                userDiv.textContent = user.username;
+                searchResults.appendChild(userDiv);
+            });
+        } else {
+            console.error("Erreur lors de la recherche d'utilisateurs");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la recherche d'utilisateurs:", error);
+    }
+});

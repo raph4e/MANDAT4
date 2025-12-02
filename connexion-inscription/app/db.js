@@ -6,7 +6,7 @@ const knex = require('knex');
 /* Créé une instance de la base de données */
 const db = knex({
     client: 'sqlite3',
-    connection : {
+    connection: {
         filename: "./MANDAT4.sqlite3"
     },
     useNullAsDefault: true
@@ -20,12 +20,13 @@ async function createTable() {
         await db.schema.createTable("utilisateur", (table) => {
             table.string("id").primary();
             table.string("name").notNullable();
+            table.integer("numTel").notNullable();
             table.string("password").notNullable();
         });
         console.log("Table 'utilisateur' créée. ")
     }
     const utilisateurConnecte = await db.schema.hasTable("utilisateurConnecte")
-    if (!utilisateurConnecte){
+    if (!utilisateurConnecte) {
         await db.schema.createTable("utilisateurConnecte", (table) => {
             table.string("id").primary();
             table.string("name").notNullable();
@@ -33,7 +34,7 @@ async function createTable() {
         console.log("Table 'utilisateurConnecte' créée. ")
     }
     const publications = await db.schema.hasTable("publications")
-    if (!publications){
+    if (!publications) {
         await db.schema.createTable("publications", (table) => {
             table.string("id").primary();
             table.string("image").notNullable();
@@ -45,16 +46,30 @@ async function createTable() {
         console.log("Table 'publications' créée. ")
     }
     const commentaires = await db.schema.hasTable("commentaires")
-    if (!commentaires){
+    if (!commentaires) {
         await db.schema.createTable("commentaires", (table) => {
             table.string("id").primary();
             table.string("idAuteur").notNullable();
-            table.foreign("idAuteur").references("utilisateur.id")            
+            table.foreign("idAuteur").references("utilisateur.id")
             table.string("idPublication").notNullable();
             table.foreign("idPublication").references("publications.id")
             table.string("message").notNullable();
         })
         console.log("Table 'commentaires' créée. ")
+    }
+    const likes = await db.schema.hasTable("likes")
+    if (!likes) {
+        await db.schema.createTable("likes", (table) => {
+            table.increments("id").primary();
+            table.string("idUtilisateur").notNullable();
+            table.foreign("idUtilisateur").references("utilisateur.id").onDelete("CASCADE");
+            table.string("idPublication").notNullable();
+            // Pas de clé étrangère car les publications sont générées dynamiquement
+            table.timestamp("dateCreation").defaultTo(db.fn.now());
+            table.unique(["idUtilisateur", "idPublication"]); // Un utilisateur ne peut liker qu'une fois
+        })
+        /* Indique la création de la table */
+        console.log("Table 'likes' créée")
     }
 }
 

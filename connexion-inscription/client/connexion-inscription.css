@@ -115,6 +115,7 @@ body {
     height: 3em;
 }
 
+<<<<<<< HEAD
 
 /*=================================== POUR UN NOUVEAU POST =================================== */
 #fichier {
@@ -205,4 +206,16 @@ body {
     font-style: normal;
     font-size: 1em;
     color: #1bbe13;
+=======
+/* Style pour le profil.html */
+#divNomUtilisateur, #divNumTel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.info-profil {
+    font-weight: bold;
+    margin-bottom: 0;
+>>>>>>> main
 }
