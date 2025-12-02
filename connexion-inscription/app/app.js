@@ -218,12 +218,13 @@ app.post('/addPublication', async (req, res) => {
         const idUtilisateurConnecte = await db('utilisateurConnecte').select('id');
 
         /* Récupère les infos de la publication */
-        const {name, image, biographie} = req.body;
+        const {image, biographie} = req.body;
 
         /* Les store dans une variable */        
         const publication = {
             id : crypto.randomUUID(),
-            name : name,
+            image, 
+            biographie,
             idAuteur : idUtilisateurConnecte,
             nombreDeLikes : 0
         }
