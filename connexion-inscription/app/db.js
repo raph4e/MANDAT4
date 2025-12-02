@@ -14,19 +14,26 @@ const db = knex({
 
 /* Fonction qui vérifie si la table utilisateur existe, et la créé si ce n'est pas le cas */
 async function createTable() {
-    const exist = await db.schema.hasTable("utilisateur");
-
+    const utilisateur = await db.schema.hasTable("utilisateur")
     /* Si la table n'existe pas, on la créé */
-    if (!exist) {
+    if (!utilisateur) {
         await db.schema.createTable("utilisateur", (table) => {
             table.string("id").primary();
             table.string("name").notNullable();
             table.string("password").notNullable();
         });
+        console.log("Table 'utilisateur' créée. ")
+    }
+    const utilisateurConnecte = await db.schema.hasTable("utilisateurConnecte")
+    if (!utilisateurConnecte){
         await db.schema.createTable("utilisateurConnecte", (table) => {
             table.string("id").primary();
             table.string("name").notNullable();
         });
+        console.log("Table 'utilisateurConnecte' créée. ")
+    }
+    const publications = await db.schema.hasTable("publications")
+    if (!publications){
         await db.schema.createTable("publications", (table) => {
             table.string("id").primary();
             table.string("name").notNullable();
@@ -35,7 +42,11 @@ async function createTable() {
             table.string("idAuteur").notNullable();
             table.foreign("idAuteur").references("utilisateur.id")
             table.string("nombreLikes").notNullable();
-        });
+        })
+        console.log("Table 'publications' créée. ")
+    }
+    const commentaires = await db.schema.hasTable("commentaires")
+    if (!commentaires){
         await db.schema.createTable("commentaires", (table) => {
             table.string("id").primary();
             table.string("idAuteur").notNullable();
@@ -44,8 +55,7 @@ async function createTable() {
             table.foreign("idPublication").references("publications.id")
             table.string("message").notNullable();
         })
-        /* Indique la création de la table */
-        console.log("Table 'utilisateur', 'utilisateurConnecte', 'publications' et 'commentaires' créé")
+        console.log("Table 'commentaires' créée. ")
     }
 }
 
