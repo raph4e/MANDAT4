@@ -9,10 +9,30 @@ fichier.onchange = function () {
   img.src = src
 }
 
-bouttonPost.addEventListener('click', (event) => {
-  event.preventDefault() 
+bouttonPost.addEventListener('click', async (event) => {
+  event.preventDefault()
   if (fichier.files.length == 0) {
     confirmation.classList.add("error")
     confirmation.textContent = "Veuillez choisir une image pour la publication"
   }
+
+  //route pour ajouter un post
+  const resultat = await fetch("/addPublication", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      image:fichier,
+      biographie: description 
+    })
+  })
+
+  if (resultat.ok){
+  // reset la page lors de la publication et msg de confirmationn
+  fichier.value = ''
+  img.value = ''
+  confirmation.classList.add('confirm')
+  confirmation.textContent = 'Publication enregistrée avec succès'
+  }
+
+  console.log('Ta cliqué')
 })

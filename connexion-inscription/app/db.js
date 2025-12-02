@@ -36,7 +36,6 @@ async function createTable() {
     if (!publications){
         await db.schema.createTable("publications", (table) => {
             table.string("id").primary();
-            table.string("name").notNullable();
             table.string("image").notNullable();
             table.string("biographie").notNullable();
             table.string("idAuteur").notNullable();
