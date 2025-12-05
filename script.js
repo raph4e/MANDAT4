@@ -273,6 +273,7 @@ async function toggleLike(idPublication, likeIcon) {
                 // Change l'icône en cœur vide
                 likeIcon.classList.remove('fa-solid'); // retire la classe du coeur plein
                 likeIcon.classList.add('fa-regular'); // ajoute la classe du coeur vide
+                likeIcon.classList.remove('liked'); // retire la classe rouge
                 console.log('Like retiré');
             } else {
                 const errorData = await response.json(); // récupère les données d'erreur
@@ -293,6 +294,7 @@ async function toggleLike(idPublication, likeIcon) {
                 // Change l'icône en cœur plein
                 likeIcon.classList.remove('fa-regular'); // retire la classe du coeur vide
                 likeIcon.classList.add('fa-solid'); // ajoute la classe du coeur plein
+                likeIcon.classList.add('liked'); // ajoute la classe rouge
                 console.log('Like ajouté');
             } else {
                 const errorData = await response.json(); // récupère les données d'erreur

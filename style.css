@@ -252,6 +252,12 @@ main {
     margin-top: -0.2em; /* Décalage vers le haut */
     border: none; /* Supprime la bordure */
     background: none;
+    transition: color 0.2s ease; /* Animation fluide pour le changement de couleur */
+}
+
+/* Cœur rouge quand il est liké */
+.post-action-icon.liked {
+    color: #ed4956; /* Rouge Instagram */
 }
 
 /* Icône de sauvegarde */
@@ -395,51 +401,6 @@ main {
     font-size: 1.3em; /* Taille de l'icône */
 }
 
-/*=================================== ADAPTATION TOUS TYPES D'ÉCRANS ===================================*/
-@media (max-width: 1200px) {
-    .posts-container {
-        max-width: 80%; /* Augmente la largeur maximale à 80% pour les écrans moyens */
-    }
-    .suggestions-section {
-        display: none; /* Cache la section des suggestions d'amis sur les écrans moyens */
-    }
-}
-
-@media (max-width: 768px) {
-    header {
-        width: 100%; /* La navbar prend toute la largeur de l'écran */
-        height: auto; /* Hauteur automatique */
-        position: relative; /* Position relative pour s'adapter au flux */
-    }
-    main {
-        margin-left: 0; /* Supprime le décalage à gauche */
-    }
-    .layout {
-        flex-direction: column; /* Aligne header et main en colonne */
-    }
-    .posts-container {
-        max-width: 100%; /* La largeur maximale est de 100
-% pour les petits écrans */
-        padding: 0 1rem; /* Réduit le padding autour des publications */
-    }
-    .stories-section {
-        padding: 0.5rem; /* Réduit le padding autour des stories */
-    }
-    .stories-container {
-        max-width: 100%; /* La largeur maximale est de 100
-% pour les stories */
-        margin-left: 0; /* Supprime le décalage à gauche */
-        padding-left: 0; /* Supprime le padding à gauche */
-    }
-    .suggestions-section {
-        display: none; /* Cache la section des suggestions d'amis sur les petits écrans */
-    }
-    .messages-badge-section {
-        top: auto; /* Réinitialise la position depuis le haut */
-        bottom: 1rem; /* Position depuis le bas de l'écran */
-        right: 1rem; /* Position depuis la droite de l'écran */
-    }
-}
 /*=========================================== Barre de recherche ==========================================*/
 
 
@@ -482,4 +443,191 @@ main {
 
 .search-results div:hover {
     background: #f5f5f5;
+}
+
+/*=================================== ADAPTATION TOUS TYPES D'ÉCRANS ===================================*/
+
+/* Grands écrans */
+@media (max-width: 1440px) {
+  .stories-container {
+    max-width: calc((6em + 0.8rem) * 6); /* Limite à 5 images visibles : (largeur image + gap) * 5 */
+    margin-left: 3em;
+  }
+   
+  header {
+    width: 4rem;
+
+
+   }
+
+  .navbar-item {
+    margin-bottom: -8em;
+    padding-right: -5em;
+  }
+
+  .navbar-item:hover {
+    padding-right: -4em;
+  }
+
+  .lien {
+    margin-bottom: -0.2em;
+    font-size: 0.98em;
+  }
+
+  main {
+    margin-left: 5rem;
+  }
+
+  .logo-icon {
+    padding-bottom: 0em;
+    margin-bottom: -9em ;
+  }
+
+  a .fa-bars {
+    padding-top: 0em;
+    margin-top: -17em;
+  }
+
+  a .fa-cubes {
+    padding-top: 0em;
+    margin-top: -18em;
+  }
+
+  .suggestions-container {
+    margin-left: -6em;
+  }
+
+  .posts-container {
+    margin-left: 1em;
+    max-width: 70%;
+    white-space: nowrap
+    
+  }
+
+  .messages-badge-section{
+    top: 29rem;
+  }
+
+  .fa-ellipsis {
+    margin-left: 16.72em;
+  }
+
+}
+
+
+
+
+/* Tablettes et petits écrans */
+@media (max-width: 1200px) {
+  header {
+    width: 4rem;
+  }
+
+  main {
+    margin-left: 5rem;
+  }
+
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stories-container {
+    margin-left: 6rem;
+    max-width: calc(100% - 6rem);
+  }
+
+  .posts-container {
+    margin-left: 6rem;
+    max-width: 85%;
+  }
+
+  .suggestions-section {
+    display: none;
+  }
+
+  .post-username {
+    margin-right: 40em
+
+  }
+
+  .fa-ellipsis {
+    margin-right: -10em
+  }
+}
+
+/* Écrans moyens et mobiles */
+@media (max-width: 768px) {
+  header {
+    position: relative;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    border-right: none;
+    border-bottom: 1px solid #222;
+  }
+
+  main {
+    margin-left: 0;
+  }
+
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stories-container {
+    margin-left: 0;
+    max-width: 100%;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  .posts-container {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .post-image {
+    width: 100%;
+  }
+
+  .messages-badge-section {
+    bottom: 1rem;
+    right: 1rem;
+    top: auto;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+  .story-image {
+    width: 4em;
+    height: 4em;
+  }
+
+  .nav-item {
+    padding: 0.5em;
+  }
+
+  .nav-icon {
+    margin-right: 0.3em;
+  }
+
+  .posts-container {
+    gap: 1.5em;
+  }
+
+  .post-actions i {
+    font-size: 1.2em;
+  }
+}
+
+/* Désactive le hover pour élargir sur mobile */
+@media (hover: none) {
+  header:hover {
+    width: 4rem;
+  }
 }
