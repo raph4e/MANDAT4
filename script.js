@@ -83,6 +83,106 @@ const LoadImages = async () => { // async function pour charger des images
             const commentIcon = document.createElement("button"); // crée un élément button pour l'icône bulle de conversation
             commentIcon.classList.add("fa-regular", "fa-comment", "post-action-icon"); // ajoute des classes CSS à l'icône bulle de conversation
             
+            // S'éxécute lorsque quelqu'un clique sur commentaire 
+            commentIcon.addEventListener('click', async ()=> {
+
+                // Récupère l'utilisateur connecté
+                const response = await fetch('/getLoginUser')
+
+                if(!response.ok) {
+
+                    // Désactive le bouton commentaire
+                    commentIcon.disabled = true
+
+                    // Indique au client qu'il faut être connecté pour écrire un commentaire
+                    const messageErreur = document.createElement("p")
+                    messageErreur.textContent = "Il faut être connecté pour écrire un commentaire"
+
+                    // Style pour le message erreur
+                    messageErreur.style.color = "red"
+                    messageErreur.style.marginLeft = "1.5em"
+
+                    // L'ajoute au HTML
+                    postItem.appendChild(messageErreur)
+
+                    // Attends 2 secondes puis supprime le message 
+                    setTimeout(() => {
+                        messageErreur.remove();
+                        commentIcon.disabled = false
+                    }, 2000);                    
+
+                    // Arrête le bloc de code
+                    return;
+                }
+
+                // Récupère l'utilisateur connecté
+                const loginUser = await response.json();
+
+                // Désactive le bouton commentaire 
+                commentIcon.disabled = true
+
+                // Créer le textarea qui permet l'écriture du commentaire
+                const commentaire = document.createElement("textarea")
+                commentaire.placeholder = "Écrivez votre commentaire ici..."
+
+                // Style pour le textarea
+                commentaire.style.width = "24em"
+                commentaire.style.height = "7em"
+                commentaire.style.marginTop = "1em"
+                commentaire.style.marginLeft = "1.5em"      
+
+                // Créer le bouton envoyer
+                const boutonEnvoyer = document.createElement("button")
+                boutonEnvoyer.textContent = "Envoyer"
+
+                // S'éxécute lorsque le bouton envoyer est cliqué
+                boutonEnvoyer.addEventListener('click', async ()=> {
+
+                    // conteneur qui met côte à côte
+                    const ligneCommentaire = document.createElement("div");
+                    ligneCommentaire.style.display = "flex";
+                    ligneCommentaire.style.flexDirection = "row";
+                    ligneCommentaire.style.gap = "0.5em";                  
+
+                    // Affiche l'utilisateur
+                    const utilisateurCommentaire = document.createElement("p")
+                    utilisateurCommentaire.textContent = loginUser.name;
+
+                    // Style pour utilisateurCommentaire
+                    utilisateurCommentaire.style.fontWeight = "bold";
+                    utilisateurCommentaire.style.marginLeft = "1.5em"
+
+                    // Affiche le commentaire
+                    const contenuCommentaire = document.createElement("p")
+                    contenuCommentaire.textContent = commentaire.value;
+
+                    // Style pour contenu commentaire
+                    contenuCommentaire.style.marginLeft = "0.5em"
+
+                    // Ajoute le contenu au HTML
+                    ligneCommentaire.appendChild(utilisateurCommentaire)
+                    ligneCommentaire.appendChild(contenuCommentaire)
+                    postItem.appendChild(ligneCommentaire)
+
+                    // Supprime le textarea et le bouton
+                    commentaire.remove();
+                    boutonEnvoyer.remove();
+
+                    // Réactive le bouton commentaire 
+                    commentIcon.disabled = false
+                })
+
+                // Style pour le bouton envoyer
+                boutonEnvoyer.style.marginTop = "2em"
+                boutonEnvoyer.style.width = "12em"
+                boutonEnvoyer.style.marginLeft = "1.5em"   
+
+                // Les ajoute au HTML
+                postItem.appendChild(commentaire)
+                postItem.appendChild(boutonEnvoyer)
+                
+            })
+            
             // Icône bookmark
             const shareIcon = document.createElement("button"); // crée un élément button pour l'icône bookmark
             shareIcon.classList.add("fa-regular", "fa-bookmark", "post-action-icon"); // ajoute des classes CSS à l'icône bookmark
@@ -212,6 +312,106 @@ const LoadVideos = async () => { // async function pour charger des vidéos
             // Icône bulle de conversation
             const commentIcon = document.createElement("i"); // crée un élément i pour l'icône bulle de conversation
             commentIcon.classList.add("fa-regular", "fa-comment", "post-action-icon"); // ajoute des classes CSS à l'icône bulle de conversation
+
+            // S'éxécute lorsque quelqu'un clique sur commentaire 
+            commentIcon.addEventListener('click', async ()=> {
+
+                // Récupère l'utilisateur connecté
+                const response = await fetch('/getLoginUser')
+
+                if(!response.ok) {
+
+                    // Désactive le bouton commentaire
+                    commentIcon.disabled = true
+
+                    // Indique au client qu'il faut être connecté pour écrire un commentaire
+                    const messageErreur = document.createElement("p")
+                    messageErreur.textContent = "Il faut être connecté pour écrire un commentaire"
+
+                    // Style pour le message erreur
+                    messageErreur.style.color = "red"
+                    messageErreur.style.marginLeft = "1.5em"
+
+                    // L'ajoute au HTML
+                    postItem.appendChild(messageErreur)
+
+                    // Attends 2 secondes puis supprime le message 
+                    setTimeout(() => {
+                        messageErreur.remove();
+                        commentIcon.disabled = false
+                    }, 2000);                    
+
+                    // Arrête le bloc de code
+                    return;
+                }
+
+                // Récupère l'utilisateur connecté
+                const loginUser = await response.json();
+
+                // Désactive le bouton commentaire 
+                commentIcon.disabled = true
+
+                // Créer le textarea qui permet l'écriture du commentaire
+                const commentaire = document.createElement("textarea")
+                commentaire.placeholder = "Écrivez votre commentaire ici..."
+
+                // Style pour le textarea
+                commentaire.style.width = "24em"
+                commentaire.style.height = "7em"
+                commentaire.style.marginTop = "1em"
+                commentaire.style.marginLeft = "1.5em"      
+
+                // Créer le bouton envoyer
+                const boutonEnvoyer = document.createElement("button")
+                boutonEnvoyer.textContent = "Envoyer"
+
+                // S'éxécute lorsque le bouton envoyer est cliqué
+                boutonEnvoyer.addEventListener('click', async ()=> {
+
+                    // conteneur qui met côte à côte
+                    const ligneCommentaire = document.createElement("div");
+                    ligneCommentaire.style.display = "flex";
+                    ligneCommentaire.style.flexDirection = "row";
+                    ligneCommentaire.style.gap = "0.5em";                  
+
+                    // Affiche l'utilisateur
+                    const utilisateurCommentaire = document.createElement("p")
+                    utilisateurCommentaire.textContent = loginUser.name;
+
+                    // Style pour utilisateurCommentaire
+                    utilisateurCommentaire.style.fontWeight = "bold";
+                    utilisateurCommentaire.style.marginLeft = "1.5em"
+
+                    // Affiche le commentaire
+                    const contenuCommentaire = document.createElement("p")
+                    contenuCommentaire.textContent = commentaire.value;
+
+                    // Style pour contenu commentaire
+                    contenuCommentaire.style.marginLeft = "0.5em"
+
+                    // Ajoute le contenu au HTML
+                    ligneCommentaire.appendChild(utilisateurCommentaire)
+                    ligneCommentaire.appendChild(contenuCommentaire)
+                    postItem.appendChild(ligneCommentaire)
+
+                    // Supprime le textarea et le bouton
+                    commentaire.remove();
+                    boutonEnvoyer.remove();
+
+                    // Réactive le bouton commentaire 
+                    commentIcon.disabled = false
+                })
+
+                // Style pour le bouton envoyer
+                boutonEnvoyer.style.marginTop = "2em"
+                boutonEnvoyer.style.width = "12em"
+                boutonEnvoyer.style.marginLeft = "1.5em"   
+
+                // Les ajoute au HTML
+                postItem.appendChild(commentaire)
+                postItem.appendChild(boutonEnvoyer)
+                
+            })
             
             // Icône bookmark
             const shareIcon = document.createElement("i"); // crée un élément i pour le bookmark
