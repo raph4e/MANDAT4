@@ -456,13 +456,11 @@ main {
    
   header {
     width: 4rem;
-
-
    }
 
   .navbar-item {
-    margin-bottom: -8em;
     padding-right: -5em;
+    padding-bottom: 0;
   }
 
   .navbar-item:hover {
@@ -470,7 +468,8 @@ main {
   }
 
   .lien {
-    margin-bottom: -0.2em;
+    margin-bottom: 0.4em;
+    padding: 0.8rem 0.4rem;
     font-size: 0.98em;
   }
 
@@ -480,17 +479,11 @@ main {
 
   .logo-icon {
     padding-bottom: 0em;
-    margin-bottom: -9em ;
+    margin-bottom: 0.5em;
   }
 
-  a .fa-bars {
-    padding-top: 0em;
-    margin-top: -17em;
-  }
-
-  a .fa-cubes {
-    padding-top: 0em;
-    margin-top: -18em;
+  #boutonConnexionInscription {
+    margin-bottom: 0.2em;
   }
 
   .suggestions-container {
@@ -500,8 +493,7 @@ main {
   .posts-container {
     margin-left: 1em;
     max-width: 70%;
-    white-space: nowrap
-    
+    white-space: nowrap;
   }
 
   .messages-badge-section{
@@ -510,6 +502,20 @@ main {
 
   .fa-ellipsis {
     margin-left: 16.72em;
+  }
+
+  .post-profile-image {
+    flex-shrink: 0;
+  }
+
+  .post-more-icon {
+    margin-left: auto;
+    margin-right: 10.5em;
+  }
+
+  .lien-group {
+    margin-bottom: 0.5em;
+    padding-bottom: 0;
   }
 
 }

@@ -37,11 +37,14 @@ async function createTable() {
     if (!publications) {
         await db.schema.createTable("publications", (table) => {
             table.string("id").primary();
-            table.string("image").notNullable();
-            table.string("biographie").notNullable();
-            table.string("idAuteur").notNullable();
-            table.foreign("idAuteur").references("utilisateur.id")
-            table.string("nombreLikes").notNullable();
+            table.string("image"); // URL de l'image (peut être null si c'est une vidéo)
+            table.string("video"); // URL de la vidéo (peut être null si c'est une image)
+            table.string("description"); // Description optionnelle
+            table.string("photographer"); // Nom du photographe/vidéaste (Pexels)
+            table.string("idAuteur"); // Peut être null pour les publications Pexels
+            table.foreign("idAuteur").references("utilisateur.id"); 
+            table.integer("nombreLikes").defaultTo(0); 
+            table.timestamp("dateCreation").defaultTo(db.fn.now());
         })
         console.log("Table 'publications' créée. ")
     }

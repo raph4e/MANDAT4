@@ -210,65 +210,104 @@ app.get('/getLoginUser', async (req, res) => {
 
 /////////////////////////////////////// Création des requêtes publications ///////////////////////////////////////
 
-/* Requête qui permet d'ajouter une publication */
+/*------------------------------ Requête qui permet d'ajouter une publication-------------------------------- */
 app.post('/addPublication', async (req, res) => {
     try {
-
-        /* Récupère l'utilisateur connecté dans la base de données qui fait la publication */
-        const idUtilisateurConnecte = await db('utilisateurConnecte').select('id');
-
         /* Récupère les infos de la publication */
-        const {image, biographie} = req.body;
+        const { id, image, video, description, photographer, idAuteur } = req.body;
 
-        /* Les store dans une variable */        
-        const publication = {
-            id : crypto.randomUUID(),
-            image, 
-            biographie,
-            idAuteur : idUtilisateurConnecte,
-            nombreDeLikes : 0
+        /* Vérifie si la publication existe déjà (évite les doublons) */
+        const existingPublication = await db('publications').where({ id }).first(); // recherche par id
+        if (existingPublication) { // si la publication existe déjà
+            return res.status(200).json({ message: "Publication déjà existante", publication: existingPublication });
         }
 
-        /* Insère la publication avec les données de la variable locale dans la base de données */
+        /* sinon crée la publication */
+        const publication = {
+            id,
+            image: image || null,
+            video: video || null,
+            description: description || null,
+            photographer: photographer || null,
+            idAuteur: idAuteur || null, // Peut être null pour Pexels car généré automatiquement
+            nombreLikes: 0
+        };
+
+        /* Insère la publication dans la base de données */
         await db('publications').insert(publication);
 
-    } catch (error) {
+        res.status(201).json({ message: "Publication ajoutée", publication });
 
+    } catch (error) {
+        console.error("Erreur lors de l'ajout de la publication :", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+/*------------------------------ Requête pour récupérer toutes les publications------------------------------------ */
+app.get('/getPublications', async (req, res) => {
+    try {
+        const publications = await db('publications').select('*').orderBy('dateCreation', 'desc'); // Récupère toutes les publications ordonnées par date de création décroissante
+        res.status(200).json(publications); 
+    } catch (error) {
+        console.error("Erreur lors de la récupération des publications :", error);
+        res.status(500).json({ error: "Erreur serveur" });
     }
 })
 
 /////////////////////////////////////// Création des requêtes commentaires ///////////////////////////////////////
 
-/* Requête qui permet d'ajouter un commentaire */
+/*--------------------------------------- Requête qui permet d'ajouter un commentaire------------------- */
 app.post('/addCommentaire', async (req, res) => {
     try {
-
-        /* Récupère l'utilisateur connecté dans la base de données qui fait la publication */
-        const idAuteur = await db('utilisateurConnecte').select('id');
-
-        /* Récupère les infos de la publication */
-        const message = req.body;
-
-        /* Les store dans une variable */        
-        const commentaire = {
-            id : crypto.randomUUID(),
-            idAuteur : idAuteur.id,
-            idPublication : idPublication,
-            message : message
+        /* Récupère l'utilisateur connecté */
+        const utilisateurConnecte = await db('utilisateurConnecte').select('id').first();
+        
+        // si aucun utilisateur connecté, renvoie une erreur
+        if (!utilisateurConnecte) {
+            return res.status(401).json({ error: "Vous devez être connecté pour commenter" });
         }
 
-        /* Insère la publication avec les données de la variable locale dans la base de données */
+        /* Récupère les infos du commentaire */
+        const { idPublication, message } = req.body;
+
+        /* Crée le commentaire */
+        const commentaire = {
+            id: crypto.randomUUID(),
+            idAuteur: utilisateurConnecte.id,
+            idPublication: idPublication,
+            message: message
+        };
+
+        /* Insère le commentaire dans la base de données */
         await db('commentaires').insert(commentaire);
 
+        res.status(201).json({ message: "Commentaire ajouté", commentaire });
+
     } catch (error) {
-
-        /* Affiche une erreur s'il y a lieu */
-        console.log("Erreur lors de l'ajout du commentaire : ", error)
-
-        /* Renvoie une réponse au client */
-        res.status(500).json({ error : "Erreur serveur" });
+        console.error("Erreur lors de l'ajout du commentaire :", error);
+        res.status(500).json({ error: "Erreur serveur" });
     }
-})
+});
+
+/*-------------------------------- Requête pour récupérer les commentaires d'une publication--------------------------- */
+app.get('/getCommentaires/:idPublication', async (req, res) => {
+    try {
+        const { idPublication } = req.params; // Récupère l'id de la publication depuis les paramètres
+        
+        /* Récupère les commentaires avec les infos de l'auteur */
+        const commentaires = await db('commentaires') // sélectionne depuis la table commentaires
+            .join('utilisateur', 'commentaires.idAuteur', 'utilisateur.id') // joint la table utilisateur pour obtenir le nom de l'auteur
+            .select('commentaires.*', 'utilisateur.name as auteurName') // sélectionne toutes les colonnes de commentaires et le nom de l'auteur
+            .where('commentaires.idPublication', idPublication) // filtre par id de publication
+            .orderBy('commentaires.id', 'asc'); // ordonne par id de commentaire (ordre chronologique)
+        
+        res.status(200).json(commentaires); 
+    } catch (error) {
+        console.error("Erreur lors de la récupération des commentaires :", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
 
 /////////////////////////////////////// Création des requêtes likes ///////////////////////////////////////
 
@@ -405,7 +444,7 @@ app.get('/getLikes/:idPublication', async (req, res) => {
         const nombreLikes = await db('likes').where({ idPublication: idPublication }).count('id as count').first();
 
         // Renvoie une réponse au client
-        res.status(200).json({ nombreLikes: nombreLikes.count });
+        res.status(200).json({ count: nombreLikes.count });
 
     // En cas d'erreur
     } catch (error) {
