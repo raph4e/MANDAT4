@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 
 
 /* Créé la table utilisateur puis démarre le serveur */
-createTable().then( () => {
+createTable().then(() => {
 
     /* Vide la table utilisateurConnecte au démarrage */
     viderTable();
@@ -57,7 +57,7 @@ createTable().then( () => {
 
 /////////////////////////////////////// Réinitialise la table utilisateurConnecte ///////////////////
 async function viderTable() {
-   await db('utilisateurConnecte').del();
+    await db('utilisateurConnecte').del();
 }
 
 /* Requête permettant de déconnecter un utilisateur (éxécutable depuis le côté client) */
@@ -79,14 +79,14 @@ app.post('/addUser', async (req, res) => {
     try {
 
         /* Récupère les infos de la requête */
-        const {name, numTel, password} = req.body;
+        const { name, numTel, password } = req.body;
 
         /* Les store dans une variable locale */
         const user = {
-            id : crypto.randomUUID(),
-            name : name,
-            numTel : numTel,
-            password : password
+            id: crypto.randomUUID(),
+            name: name,
+            numTel: numTel,
+            password: password
         };
 
         /* Insère l'utilisateur avec les données de la variable locale dans la base de données */
@@ -95,14 +95,14 @@ app.post('/addUser', async (req, res) => {
         /* Renvoie une réponse au client avec l'utilisateur ajouté */
         res.status(201).json(user);
 
-        
+
     } catch (error) {
-        
+
         /* Envoie une erreur de code 500 au client s'il y en a une */
         console.error("Erreur lors de l'ajout d'un utilisateur : ", error);
 
         /* Renvoie une réponse au client */
-        res.status(500).json({ error : "Erreur serveur" });
+        res.status(500).json({ error: "Erreur serveur" });
     }
 })
 
@@ -112,10 +112,10 @@ app.post('/loginUser', async (req, res) => {
     try {
 
         /* Récupère les infos de la requête */
-        const {name, password} = req.body;
+        const { name, password } = req.body;
 
         /* Recherche de l'utilisateur. First() s'assure que qu'il n'y ait qu'un seul résultat à cette recherche */
-        const utilisateurConnexion = await db('utilisateur').where({name : name, password : password}).select("*").first();
+        const utilisateurConnexion = await db('utilisateur').where({ name: name, password: password }).select("*").first();
 
         /* Confirme si la connexion a bel et bien été réussi. Sinon, affiche un message l'indiquant dans la console */
         if (utilisateurConnexion) {
@@ -127,13 +127,13 @@ app.post('/loginUser', async (req, res) => {
             res.status(200).json(utilisateurConnexion);
 
             /* Récupère l'id de l'utilisateur connecté */
-            const idUtilisateurConnecte = await db('utilisateur').where({name : name, password : password}).select('id').first();
+            const idUtilisateurConnecte = await db('utilisateur').where({ name: name, password: password }).select('id').first();
 
             /* Supprime l'utilisateur connecté dans la table utilisateurConnecté */
             await db('utilisateurConnecte').del();
 
             /* L'ajoute à la table utilisateurConnecté */
-            await db('utilisateurConnecte').insert({id : idUtilisateurConnecte.id, name : name})
+            await db('utilisateurConnecte').insert({ id: idUtilisateurConnecte.id, name: name })
 
         } else {
 
@@ -141,7 +141,7 @@ app.post('/loginUser', async (req, res) => {
             console.log("nom d'utilisateur ou mot de passe incorrect.");
 
             /* Envoie une réponse sous forme d'erreur */
-            res.status(401).json({ error: "Nom d'utilisateur ou mot de passe incorrect." }); 
+            res.status(401).json({ error: "Nom d'utilisateur ou mot de passe incorrect." });
 
         }
     } catch (error) {
@@ -150,7 +150,7 @@ app.post('/loginUser', async (req, res) => {
         console.error("Erreur lors de la connexion : ", error);
 
         /* Renvoie une réponse au client */
-        res.status(500).json({ error : "Erreur serveur" });
+        res.status(500).json({ error: "Erreur serveur" });
     }
 });
 
@@ -166,7 +166,7 @@ app.get('/getLoginUserNumTel', async (req, res) => {
         }
 
         /* Récupère le numéro de téléphone correspondant à l'id de l'utilisateur connecté */
-        const numTel = await db('utilisateur').where({id : idUtilisateurConnecte.id}).select('numTel').first();
+        const numTel = await db('utilisateur').where({ id: idUtilisateurConnecte.id }).select('numTel').first();
 
         /* Vérifie si numTel existe */
         if (!numTel) {
@@ -177,12 +177,12 @@ app.get('/getLoginUserNumTel', async (req, res) => {
         res.status(200).json(numTel)
 
     } catch (error) {
-        
+
         /* Affiche une erreur s'il y a lieu */
         console.log("Erreur lors de la récupération du numéro de téléphone de l'utilisateur connecté : ", error)
 
         /* Renvoie une réponse au client */
-        res.status(500).json({ error : "Erreur serveur" });
+        res.status(500).json({ error: "Erreur serveur" });
     }
 })
 
@@ -214,7 +214,7 @@ app.get('/getLoginUser', async (req, res) => {
         console.log("Erreur lors de la récupération de l'utilisateur connecté : ", error)
 
         /* Renvoie une réponse au client */
-        res.status(500).json({ error : "Erreur serveur" });
+        res.status(500).json({ error: "Erreur serveur" });
     }
 })
 
@@ -258,7 +258,7 @@ app.post('/addPublication', async (req, res) => {
 app.get('/getPublications', async (req, res) => {
     try {
         const publications = await db('publications').select('*').orderBy('dateCreation', 'desc'); // Récupère toutes les publications ordonnées par date de création décroissante
-        res.status(200).json(publications); 
+        res.status(200).json(publications);
     } catch (error) {
         console.error("Erreur lors de la récupération des publications :", error);
         res.status(500).json({ error: "Erreur serveur" });
@@ -272,7 +272,7 @@ app.post('/addCommentaire', async (req, res) => {
     try {
         /* Récupère l'utilisateur connecté */
         const utilisateurConnecte = await db('utilisateurConnecte').select('id').first();
-        
+
         // si aucun utilisateur connecté, renvoie une erreur
         if (!utilisateurConnecte) {
             return res.status(401).json({ error: "Vous devez être connecté pour commenter" });
@@ -304,15 +304,15 @@ app.post('/addCommentaire', async (req, res) => {
 app.get('/getCommentaires/:idPublication', async (req, res) => {
     try {
         const { idPublication } = req.params; // Récupère l'id de la publication depuis les paramètres
-        
+
         /* Récupère les commentaires avec les infos de l'auteur */
         const commentaires = await db('commentaires') // sélectionne depuis la table commentaires
             .join('utilisateur', 'commentaires.idAuteur', 'utilisateur.id') // joint la table utilisateur pour obtenir le nom de l'auteur
             .select('commentaires.*', 'utilisateur.name as auteurName') // sélectionne toutes les colonnes de commentaires et le nom de l'auteur
             .where('commentaires.idPublication', idPublication) // filtre par id de publication
             .orderBy('commentaires.id', 'asc'); // ordonne par id de commentaire (ordre chronologique)
-        
-        res.status(200).json(commentaires); 
+
+        res.status(200).json(commentaires);
     } catch (error) {
         console.error("Erreur lors de la récupération des commentaires :", error);
         res.status(500).json({ error: "Erreur serveur" });
@@ -326,7 +326,7 @@ app.post('/addLike', async (req, res) => {
     try {
         // Récupère l'utilisateur connecté 
         const utilisateurConnecte = await db('utilisateurConnecte').select('id').first();
-        
+
         // si aucun utilisateur connecté, renvoie une erreur
         if (!utilisateurConnecte) {
             return res.status(401).json({ error: "Vous devez être connecté pour liker" });
@@ -356,12 +356,12 @@ app.post('/addLike', async (req, res) => {
         const nombreLikes = await db('likes').where({ idPublication: idPublication }).count('id as count').first();
 
         // Renvoie une réponse au client
-        res.status(201).json({ 
-            message: "Like ajouté", 
-            nombreLikes: nombreLikes.count 
+        res.status(201).json({
+            message: "Like ajouté",
+            nombreLikes: nombreLikes.count
         });
 
-    // En cas d'erreur
+        // En cas d'erreur
     } catch (error) {
         console.error("Erreur lors de l'ajout du like : ", error);
         res.status(500).json({ error: "Erreur serveur" });
@@ -373,7 +373,7 @@ app.delete('/removeLike', async (req, res) => {
     try {
         // Récupère l'utilisateur connecté 
         const utilisateurConnecte = await db('utilisateurConnecte').select('id').first();
-        
+
         // si aucun utilisateur connecté, renvoie une erreur
         if (!utilisateurConnecte) {
             return res.status(401).json({ error: "Vous devez être connecté" });
@@ -403,12 +403,12 @@ app.delete('/removeLike', async (req, res) => {
         const nombreLikes = await db('likes').where({ idPublication: idPublication }).count('id as count').first();
 
         // Renvoie une réponse au client
-        res.status(200).json({ 
-            message: "Like retiré", 
-            nombreLikes: nombreLikes.count 
+        res.status(200).json({
+            message: "Like retiré",
+            nombreLikes: nombreLikes.count
         });
 
-    // En cas d'erreur
+        // En cas d'erreur
     } catch (error) {
         console.error("Erreur lors de la suppression du like : ", error);
         res.status(500).json({ error: "Erreur serveur" });
@@ -420,7 +420,7 @@ app.get('/checkLike/:idPublication', async (req, res) => {
     try {
         const utilisateurConnecte = await db('utilisateurConnecte').select('id').first(); // Récupère l'utilisateur connecté
 
-         // si aucun utilisateur connecté, renvoie liked: false
+        // si aucun utilisateur connecté, renvoie liked: false
         if (!utilisateurConnecte) {
             return res.status(200).json({ liked: false });
         }
@@ -437,7 +437,7 @@ app.get('/checkLike/:idPublication', async (req, res) => {
         // Renvoie une réponse au client
         res.status(200).json({ liked: !!likeExiste });
 
-    // En cas d'erreur
+        // En cas d'erreur
     } catch (error) {
         console.error("Erreur lors de la vérification du like : ", error);
         res.status(500).json({ error: "Erreur serveur" });
@@ -456,9 +456,40 @@ app.get('/getLikes/:idPublication', async (req, res) => {
         // Renvoie une réponse au client
         res.status(200).json({ count: nombreLikes.count });
 
-    // En cas d'erreur
+        // En cas d'erreur
     } catch (error) {
         console.error("Erreur lors de la récupération des likes : ", error);
         res.status(500).json({ error: "Erreur serveur" });
     }
 });
+
+
+// requêtes pour bypass la fonctionalité de base et dicter des id randoms pour ajouter likes & commentaires
+app.post('/addLikeBypass/:idPost', async (req, res) => {
+    try {
+        const { idPost } = req.params
+        await db('likes').insert({
+            idUtilisateur: crypto.randomUUID(),
+            idPublication: idPost
+        })
+        res.status(200).json({ message: "Like ajouté" })
+    }
+    catch (error) {
+        console.error("Erreur lors de l'ajout du like : ", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+})
+
+app.post('/addCommentBypass/:idPost', async (req, res) => {
+    try {
+        const { idPost } = req.params
+        const { comment } = req.body
+
+        const commentaire = {
+            id: crypto.randomUUID(),
+            idAuteur: crypto.randomUUID(),
+            idPublication: idPublication,
+            message: message
+        };
+    }
+})

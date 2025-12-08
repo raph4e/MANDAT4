@@ -589,6 +589,22 @@ document.addEventListener('click', (e) => {
 });
 
 
+// ----------------- Fonction pour ajouter des likes & commentaires randoms -----------------
+
+async function populateLikesComments() {
+    try {
+        const resultat = await fetch('/getPublications')
+        if (!resultat.ok) {throw new Error("Erreur du côté serveur lors de la récupération des publications")}
+        const publications = await resultat.json()
+        for (const pub of publications){
+            const commentaire = await fetch('/')
+        }
+    }
+
+
+}
+
+
 //==================================== Lorsqu'un utilisateur clique sur profil ============================
 
 /* Récupère le bouton */
