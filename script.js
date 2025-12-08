@@ -59,22 +59,22 @@ const LoadStoriesAndSuggestions = async () => {
 //------------Fonction pour charger les publications depuis Pexels (photos et vidéos)--------------------------------------------------------
 const LoadImages = async () => {
     try {
-        // Charger plusieurs pages de photos et vidéos de Pexels pour avoir envirn 400 publications
+        // Charger plusieurs pages de photos et vidéos de Pexels pour avoir envirn 50 publications
         const promises = [];
         
-        // 10 pages x 10 images = 100 images qu'on va stocker dans la base de données ensuite
-        for (let page = 1; page <= 10; page++) {
+        // 10 pages x 5 images = 5 images qu'on va stocker dans la base de données ensuite
+        for (let page = 1; page <= 5; page++) {
             promises.push( // elles sont d'abord toutes stockées dans un tableau de promesses
-                fetch(`https://api.pexels.com/v1/curated?per_page=10&page=${page}`, { // Requête à l'API Pexels pour obtenir des images
+                fetch(`https://api.pexels.com/v1/curated?per_page=5&page=${page}`, { // Requête à l'API Pexels pour obtenir des images
                     headers: { Authorization: API_KEY } // Ajoute la clé API dans les en-têtes de la requête
                 }).then(res => res.json()).then(data => ({ type: 'photo', data })) // chaque promesse résout en un objet avec le type et les données
             );
         }
         
-        // 10 pages x 10 vidéos = 100 vidéos
-        for (let page = 1; page <= 10; page++) { // elles seront stockées dans la base de données ensuite
+        // 10 pages x 5 vidéos = 5 vidéos
+        for (let page = 1; page <= 5; page++) { // elles seront stockées dans la base de données ensuite
             promises.push( // elles sont d'abord toutes stockées dans un tableau de promesses
-                fetch(`https://api.pexels.com/videos/popular?per_page=10&page=${page}`, { // Requête à l'API Pexels pour obtenir des vidéos
+                fetch(`https://api.pexels.com/videos/popular?per_page=5&page=${page}`, { // Requête à l'API Pexels pour obtenir des vidéos
                     headers: { Authorization: API_KEY } // Ajoute la clé API dans les en-têtes de la requête
                 }).then(res => res.json()).then(data => ({ type: 'video', data })) // chaque promesse résout en un objet avec le type et les données
             );
@@ -82,7 +82,7 @@ const LoadImages = async () => {
         
         const allData = await Promise.all(promises); // Attend que toutes les promesses soient résolues pour éviter les problèmes d'asynchronicité
         
-//---------------- Stockage des photos du tableau dans la base de données (environ 200)------------------------------------------------
+//---------------- Stockage des photos du tableau dans la base de données (environ 25)------------------------------------------------
 // *** IMPORTANT : LE PREMIER CHARGEMENT EST PLUS LONG MAIS LORS DES PROCHAINS CHARGEMENTS, LES DONNÉES SONT DÉJÀ DANS LA BASE DE DONNÉES ET IL N'Y AURA PAS BESOIN DE RECHARGER DE PEXELS DONC BEAUCOUP PLUS RAPIDE ***    
         for (const item of allData) { // vient parcourir chaque élément du tableau
             if (item.type === 'photo') { // si c'est une photo
@@ -104,7 +104,7 @@ const LoadImages = async () => {
                         console.error("Erreur lors de la sauvegarde de la photo:", error);
                     }
                 }
-//------------ Stockage des vidéos du tableau dans la base de données (environ 200)------------------------------------------------
+//------------ Stockage des vidéos du tableau dans la base de données (environ 25)------------------------------------------------
             } else if (item.type === 'video') { // si c'est une vidéo
                 for (const video of item.data.videos) { // vient parcourir chaque vidéo reçue
                     try {
@@ -154,8 +154,8 @@ function createPostElement(publication) { // publication est un objet avec les d
     const userName = document.createElement("span"); // nom d'utilisateur
     userName.textContent = publication.photographer || "utilisateur"; // utilise le nom du photographe ou un nom par défaut
     userName.classList.add("post-username", "noto-sans-0"); // ajoute des classes CSS au nom d'utilisateur
-    
-    const moreIcon = document.createElement("button"); // icône "plus" pour les options supplémentaires
+
+    const moreIcon = document.createElement("span"); // icône "plus" pour les options supplémentaires
     moreIcon.classList.add("fa-solid", "fa-ellipsis", "post-more-icon"); // ajoute des classes CSS à l'icône
     
     postHeader.appendChild(profileImg); // ajoute l'image de profil à l'en-tête
@@ -424,7 +424,7 @@ async function LoadPublicationsFromDB() {
             
             // Sélectionner 10 publications aléatoires
             const shuffled = publications.sort(() => 0.5 - Math.random()); // mélange les publications de manière aléatoire
-            const selectedPublications = shuffled.slice(0, 10); // prend les 10 premières publications du tableau mélangé
+            const selectedPublications = shuffled.slice(0, 50); // prend les 10 premières publications du tableau mélangé
             
             console.log(`Affichage de ${selectedPublications.length} publications aléatoires`);
             

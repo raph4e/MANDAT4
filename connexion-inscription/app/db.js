@@ -14,6 +14,20 @@ const db = knex({
 
 /* Fonction qui vérifie si la table utilisateur existe, et la créé si ce n'est pas le cas */
 async function createTable() {
+    // FORCER LA SUPPRESSION DES TABLES DÉPENDANTES PUIS PUBLICATIONS (temporaire pour debug)
+    if (await db.schema.hasTable("likes")) {
+        await db.schema.dropTable("likes");
+        console.log("⚠️ Table 'likes' supprimée pour recréation")
+    }
+    if (await db.schema.hasTable("commentaires")) {
+        await db.schema.dropTable("commentaires");
+        console.log("⚠️ Table 'commentaires' supprimée pour recréation")
+    }
+    if (await db.schema.hasTable("publications")) {
+        await db.schema.dropTable("publications");
+        console.log("⚠️ Table 'publications' supprimée pour recréation")
+    }
+    
     const utilisateur = await db.schema.hasTable("utilisateur")
     /* Si la table n'existe pas, on la créé */
     if (!utilisateur) {
