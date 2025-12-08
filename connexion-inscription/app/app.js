@@ -15,13 +15,23 @@ const path = require('path');
 const { db, createTable } = require('./db');
 const { default: knex } = require('knex');
 
-/* Route vers la page inscription */
+// Ajout des en-têtes CORS pour permettre les requêtes depuis le frontend (car sinon faisait des erreurs de politique de même origine et envoyait des requêtes bloquées)
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
+// Servir les fichiers statiques
 app.use(express.static(path.join(__dirname, "../../")));
 app.use(express.static(path.join(__dirname, "../client")));
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/inscription.html"));
+// Route principale - redirige vers connexion.html
+app.get('/', (req, res) => {
+    res.redirect('/connexion.html');
 });
+
 
 /////////////////////////////////////// Création de la base de données ////////////////////////////////
 
@@ -194,7 +204,7 @@ app.get('/getLoginUser', async (req, res) => {
 
             /* Sinon, l'indique */
             console.log("Aucun utilisateur connecté")
-            res.status(404).json({ error: "Aucun utilisateur connecté" });
+            //res.status(404).json({ error: "Aucun utilisateur connecté" });
 
         }
 

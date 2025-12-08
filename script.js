@@ -466,8 +466,9 @@ window.onload = async () => {
     // 3. Si pas de publications dans la base de données, charger depuis Pexels (et elles seront sauvegardées)
     if (!hasPublications) {
         console.log("Aucune publication en BDD, chargement depuis Pexels...");
-        await LoadImages();
-        await LoadVideos();
+        await LoadImages(); // Charge 100 photos + 100 vidéos et les sauvegarde en BDD
+        // Puis recharge depuis la base pour les afficher
+        await LoadPublicationsFromDB();
     }
 }
 
@@ -664,5 +665,34 @@ searchInput.addEventListener("input", async () => {
         }
     } catch (error) {
         console.error("Erreur lors de la recherche d'utilisateurs:", error);
+    }
+});
+
+
+//===================================== GESTION DE LA CONNEXION/INSCRIPTION ============================
+
+/* S'éxécute lorsque la page est loadé */
+window.addEventListener('DOMContentLoaded', async () => {
+
+    try {
+
+        /* Récupère l'utilisateur connecté si il y a lieu */
+        res = await fetch('/getLoginUser', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+
+        /* Convertit la réponse en JSON */
+        utilisateurConnecte = await res.json()
+
+        /* Redirige l'utilisateur vers la page connexion/inscription s'il n'est pas connecté et essaie d'accéder à profil.html */
+        if (utilisateurConnecte.res === 200 && !utilisateurConnecte.name) {
+            window.location.href = "/connexion-inscription/client/connexion.html"
+        }
+
+    } catch (error) {
+
+        /* Indique l'erreur si c'est le cas */
+        console.error("Erreur lors de la récupération de l'utilisateur connecté : ", error)
     }
 });

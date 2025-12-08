@@ -96,7 +96,7 @@ boutonInscription.addEventListener("click", async (e) => {
 
                 /* Redirection vers la page d'accueil */
                 setTimeout(() => {
-                    window.location.href = "/index.html"; 
+                    window.location.href = "/accueil.html"; 
                 }, 2000);
 
             } else {
