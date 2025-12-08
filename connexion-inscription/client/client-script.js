@@ -5,6 +5,26 @@ const motDePasse = document.getElementById("motDePasse")
 const divPasDeCompte = document.getElementById("divPasDeCompte")
 const numTelephone = document.getElementById("numTelephone")
 
+/* S'éxécute lorsque le contenu de la page est chargé */
+window.addEventListener('DOMContentLoaded', () => {
+    try {
+
+        /* S'éxécute si l'utilisateur est sur la page de connexion */
+        if (window.location.href.endsWith("/connexion.html")) {
+
+            /* Appelle la fonction qui permet de charger les cookies si il y en a */
+            chargerDonneesDepuisCookies()
+
+        };
+
+    } catch (error) {
+
+        /* Indique l'erreur si c'est le cas */
+        console.error("Erreur lors de la récupération et l'affichage des cookies : ", error)
+
+    }
+})
+
 /* Ajoute un utilisateur à la base de données lorsque que le bouton pour s'inscrire est cliqué */
 boutonInscription.addEventListener("click", async (e) => {
 
@@ -25,6 +45,10 @@ boutonInscription.addEventListener("click", async (e) => {
             })
         })
 
+        /* Store les infos entrées dans un cookie */
+        document.cookie = `nomUtilisateur=${encodeURIComponent(nomUtilisateur.value)}; path=/`;
+        document.cookie = `motDePasse=${encodeURIComponent(motDePasse.value)}; path=/`;
+
         /* Réinitialise les inputs */
         nomUtilisateur.value = ""
         numTelephone.value = ""
@@ -40,16 +64,13 @@ boutonInscription.addEventListener("click", async (e) => {
             divPasDeCompte.innerHTML = `<span style="color:red;">Erreur lors de l'inscription.</span>`
         }
 
-        /* Remet le texte initiale 
-        divPasDeCompte.innerHTML = `
-            <span>Pas de compte?</span>
-            <a href="inscription.html">S'inscrire</a>
-        ` */
-
     } else if (window.location.href.endsWith("/connexion.html")) {
 
         /* Préviens les actions par défaut du formulaire */
         e.preventDefault();
+
+        /* Appelle la fonction qui permet de charger les cookies si il y en a */
+        chargerDonneesDepuisCookies()
 
         /* Appel de la requête connexion lorsqu'un utilisateur clique sur connexion */
         try {
@@ -62,6 +83,10 @@ boutonInscription.addEventListener("click", async (e) => {
                     password : motDePasse.value
                 })
             });
+
+            /* Store les infos entrées dans un cookie */
+            document.cookie = `nomUtilisateur=${encodeURIComponent(nomUtilisateur.value)}; path=/`;
+            document.cookie = `motDePasse=${encodeURIComponent(motDePasse.value)}; path=/`;
 
             /* Store dans une variable */
             if (response.ok) {
@@ -110,3 +135,28 @@ boutonInscription.addEventListener("click", async (e) => {
         console.log("Page html introuvable")
     }
 });
+
+function chargerDonneesDepuisCookies() {
+    /* Récupère les cookies et les divise en paires clé-valeur */
+    const cookies = document.cookie.split('; ');
+
+    /* Parcoure chaque cookie et remplit les champs de formulaire correspondants */
+    cookies.forEach(cookie => {
+
+        /* Divise chaque cookie en clé et valeur */
+        const [clé, valeur] = cookie.split('=');
+
+        /* Remplit les champs de formulaire correspondants */
+        const input = document.getElementById(clé);
+
+        /* Vérifie si l'input existe avant de lui assigner une valeur */
+        if (input) {
+
+            /* Décode la valeur et l'assigne à l'input */
+            input.value = decodeURIComponent(valeur);
+
+            /* Ajoute une classe pour indiquer que l'input est rempli */
+            input.classList.add('input-filled');
+        }
+    });
+}

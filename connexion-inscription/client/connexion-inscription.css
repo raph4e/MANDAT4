@@ -7,6 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    height: 100%;
 }
 
 /* Image background et image logo */
@@ -93,6 +94,10 @@ body {
     text-align: left;
 }
 
+.input-filled {
+    background-color: #cce5ff; /* bleu clair */
+}
+
 /* CSS pour le bouton du formulaire */
 .bouton-champ {
     width: 100%;
@@ -115,7 +120,6 @@ body {
     height: 3em;
 }
 
-<<<<<<< HEAD
 
 /*=================================== POUR UN NOUVEAU POST =================================== */
 #fichier {
@@ -206,16 +210,4 @@ body {
     font-style: normal;
     font-size: 1em;
     color: #1bbe13;
-=======
-/* Style pour le profil.html */
-#divNomUtilisateur, #divNumTel {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.info-profil {
-    font-weight: bold;
-    margin-bottom: 0;
->>>>>>> main
 }
