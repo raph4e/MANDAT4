@@ -642,7 +642,7 @@ document.addEventListener("click", (event) => {
         searchResults.innerHTML = "";
     }
 });
-// Gère la recherche d'utilisateurs au fur et à mesure de la saisie
+// Gère la recherche d'utilisateurs et de publications au fur et à mesure de la saisie
 searchInput.addEventListener("input", async () => {
     const query = searchInput.value.trim();
     if (query.length === 0) {
@@ -650,21 +650,84 @@ searchInput.addEventListener("input", async () => {
         return;
     }
     try {
-        const response = await fetch(`/searchUsers?query=${encodeURIComponent(query)}`);
-        if (response.ok) {
-            const users = await response.json();
-            searchResults.innerHTML = "";
-            users.forEach(user => {
-                const userDiv = document.createElement("div");
-                userDiv.classList.add("search-result-item");
-                userDiv.textContent = user.username;
-                searchResults.appendChild(userDiv);
-            });
-        } else {
-            console.error("Erreur lors de la recherche d'utilisateurs");
+        // Recherche d'utilisateurs
+        const usersResponse = await fetch(`/SearchBar?query=${encodeURIComponent(query)}`);
+        // Recherche de publications
+        const postsResponse = await fetch(`/SearchPost?query=${encodeURIComponent(query)}`);
+        
+        searchResults.innerHTML = "";
+        
+        // Affiche les utilisateurs
+        if (usersResponse.ok) {
+            const users = await usersResponse.json();
+            if (users.length > 0) {
+                // Titre pour les utilisateurs
+                const usersTitle = document.createElement("div");
+                usersTitle.classList.add("search-section-title");
+                usersTitle.textContent = "Utilisateurs";
+                usersTitle.style.fontWeight = "bold";
+                usersTitle.style.marginTop = "0.5em";
+                usersTitle.style.marginBottom = "0.5em";
+                usersTitle.style.paddingLeft = "0.5em";
+                searchResults.appendChild(usersTitle);
+                
+                users.forEach(user => {
+                    const userDiv = document.createElement("div");
+                    userDiv.classList.add("search-result-item");
+                    userDiv.style.padding = "0.5em";
+                    userDiv.innerHTML = `<strong>${user.name}</strong> - ${user.numTel}`;
+                    searchResults.appendChild(userDiv);
+                });
+            }
         }
+        
+        // Affiche les publications
+        if (postsResponse.ok) {
+            const posts = await postsResponse.json();
+            if (posts.length > 0) {
+                // Titre pour les publications
+                const postsTitle = document.createElement("div");
+                postsTitle.classList.add("search-section-title");
+                postsTitle.textContent = "Publications";
+                postsTitle.style.fontWeight = "bold";
+                postsTitle.style.marginTop = "0.5em";
+                postsTitle.style.marginBottom = "0.5em";
+                postsTitle.style.paddingLeft = "0.5em";
+                searchResults.appendChild(postsTitle);
+                
+                posts.forEach(post => {
+                    const postDiv = document.createElement("div");
+                    postDiv.classList.add("search-result-item");
+                    postDiv.style.padding = "0.5em";
+                    postDiv.innerHTML = `<strong>${post.photographer || "Utilisateur"}</strong> - ${post.description || "Sans description"}`;
+                    postDiv.style.cursor = "pointer";
+                    // Scroll vers la publication au clic
+                    postDiv.addEventListener("click", () => {
+                        const postElement = document.querySelector(`[data-publication-id="${post.id}"]`);
+                        if (postElement) {
+                            postElement.scrollIntoView({ behavior: "smooth" });
+                            searchBox.style.display = "none";
+                            searchInput.value = "";
+                            searchResults.innerHTML = "";
+                        }
+                    });
+                    searchResults.appendChild(postDiv);
+                });
+            }
+        }
+        
+        // Affiche un message si aucun résultat
+        if (searchResults.innerHTML === "") {
+            const noResults = document.createElement("div");
+            noResults.style.padding = "1em";
+            noResults.style.textAlign = "center";
+            noResults.textContent = "Aucun résultat trouvé";
+            searchResults.appendChild(noResults);
+        }
+        
     } catch (error) {
-        console.error("Erreur lors de la recherche d'utilisateurs:", error);
+        console.error("Erreur lors de la recherche :", error);
+        searchResults.innerHTML = "<div style='padding: 1em;'>Erreur lors de la recherche</div>";
     }
 });
 

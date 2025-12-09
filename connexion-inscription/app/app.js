@@ -462,3 +462,43 @@ app.get('/getLikes/:idPublication', async (req, res) => {
         res.status(500).json({ error: "Erreur serveur" });
     }
 });
+
+app.get('/SearchBar', async (req, res) => {
+    try {
+        const { query } = req.query; // Récupère la requête de recherche depuis les paramètres
+        if (!query) {
+            return res.status(400).json({ error: "Aucune requête de recherche fournie" });
+        }
+        // Recherche dans la table utilisateur
+        const resultats = await db('utilisateur')
+            .where('name', 'like', `%${query}%`) // Recherche par nom d'utilisateur
+            .orWhere('numTel', 'like', `%${query}%`) // Recherche par numéro de téléphone
+            .select('id', 'name', 'numTel'); // Sélectionne les colonnes à renvoyer
+        // Renvoie les résultats de la recherche
+        res.status(200).json(resultats);
+    } catch (error) {
+        console.error("Erreur lors de la recherche :", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+/*------------------------------ Requête pour rechercher une publication --------------------------------*/
+app.get('/SearchPost', async (req, res) => {
+    try {
+        const { query } = req.query; // Récupère la requête de recherche depuis les paramètres
+        if (!query) {
+            return res.status(400).json({ error: "Aucune requête de recherche fournie" });
+        }
+        // Recherche dans la table publications
+        const resultats = await db('publications')
+            .where('description', 'like', `%${query}%`) // Recherche par description
+            .orWhere('photographer', 'like', `%${query}%`) // Recherche par photographe
+            .select('*') // Sélectionne toutes les colonnes
+            .orderBy('dateCreation', 'desc'); // Ordonne par date de création décroissante
+        // Renvoie les résultats de la recherche
+        res.status(200).json(resultats);
+    } catch (error) {
+        console.error("Erreur lors de la recherche de publication :", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
