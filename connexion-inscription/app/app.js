@@ -491,5 +491,11 @@ app.post('/addCommentBypass/:idPost', async (req, res) => {
             idPublication: idPublication,
             message: message
         };
+        await db('commentaires').insert(commentaire);
+        res.status(200).json({ message: "Commentaire random ajouté : ", commentaire})
+    }
+    catch(error){
+        console.error("Erreur lors de l'ajout du commentaire :", error)
+        res.status(500).json({ error: "Erreur serveur" })
     }
 })

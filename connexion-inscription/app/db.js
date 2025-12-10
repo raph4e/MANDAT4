@@ -14,7 +14,6 @@ const db = knex({
 
 /* Fonction qui vérifie si la table utilisateur existe, et la créé si ce n'est pas le cas */
 async function createTable() {
-    
     const utilisateur = await db.schema.hasTable("utilisateur")
     /* Si la table n'existe pas, on la créé */
     if (!utilisateur) {
