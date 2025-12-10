@@ -14,7 +14,6 @@ const db = knex({
 
 /* Fonction qui vérifie si la table utilisateur existe, et la créé si ce n'est pas le cas */
 async function createTable() {
-    
     const utilisateur = await db.schema.hasTable("utilisateur")
     /* Si la table n'existe pas, on la créé */
     if (!utilisateur) {
@@ -54,7 +53,14 @@ async function createTable() {
         await db.schema.createTable("commentaires", (table) => {
             table.string("id").primary();
             table.string("idAuteur").notNullable();
-            table.foreign("idAuteur").references("utilisateur.id")
+            /*
+            nous sommes conscients que dans une vraie situation, une clé étrangère serait requise
+            Pour les besoins de la cause et pour des besoins d'esthétiques, nous n'avons pas mis
+            de clé étrangère pour permettre de populer les commentaires afin de voir le nombre d'une 
+            publication sans devoir faire plusieurs dizaines de comptes et commenter sur 
+            chaque publication
+
+            table.foreign("idAuteur").references("utilisateur.id")*/
             table.string("idPublication").notNullable();
             table.foreign("idPublication").references("publications.id")
             table.string("message").notNullable();
@@ -66,7 +72,13 @@ async function createTable() {
         await db.schema.createTable("likes", (table) => {
             table.increments("id").primary();
             table.string("idUtilisateur").notNullable();
-            table.foreign("idUtilisateur").references("utilisateur.id").onDelete("CASCADE");
+            /*
+            nous sommes conscients que dans une vraie situation, une clé étrangère serait requise
+            Pour les besoins de la cause et pour des besoins d'esthétiques, nous n'avons pas mis
+            de clé étrangère pour permettre de populer les likes afin de voir le nombre d'une 
+            publication sans devoir faire plusieurs dizaines de comptes et aimer chaque publication
+
+            table.foreign("idUtilisateur").references("utilisateur.id").onDelete("CASCADE"); */
             table.string("idPublication").notNullable();
             // Pas de clé étrangère car les publications sont générées dynamiquement
             table.timestamp("dateCreation").defaultTo(db.fn.now());

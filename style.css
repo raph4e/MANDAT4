@@ -194,7 +194,7 @@ main {
 
 /* En-tête de la publication (photo + nom) */
 .post-header {
-    width: 100%; /* Prend toute la largeur disponible */
+    width: 100%;
     display: flex; /* Utilise flexbox */
     align-items: center; /* Centre verticalement */
     gap: 0.75rem; /* Espace entre la photo et le nom */
@@ -286,8 +286,6 @@ main {
     font-weight: bold; /* met le texte en gras */
     font-size: 0.9em; /* taille de police légèrement plus petite */
 }
-
-
 
 /*=========================================== SUGGESTIONS AMIS ==========================================*/
 
@@ -463,9 +461,9 @@ main {
     background: #f5f5f5;
 }
 
-/*=================================== ADAPTATION  ===================================*/
+/*=================================== ADAPTATION TOUS TYPES D'ÉCRANS ===================================*/
 
-/* écrans laptop */
+/* Grands écrans */
 @media (max-width: 1440px) {
   .stories-container {
     max-width: calc((6em + 0.8rem) * 6); /* Limite à 5 images visibles : (largeur image + gap) * 5 */
@@ -562,4 +560,117 @@ main {
 
 
 
+/* Tablettes et petits écrans */
+@media (max-width: 1200px) {
+  header {
+    width: 4rem;
+  }
 
+  main {
+    margin-left: 5rem;
+  }
+
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stories-container {
+    margin-left: 6rem;
+    max-width: calc(100% - 6rem);
+  }
+
+  .posts-container {
+    margin-left: 6rem;
+    max-width: 85%;
+  }
+
+  .suggestions-section {
+    display: none;
+  }
+
+  .post-username {
+    margin-right: 40em
+
+  }
+
+  .fa-ellipsis {
+    margin-right: -10em
+  }
+}
+
+/* Écrans moyens et mobiles */
+@media (max-width: 768px) {
+  header {
+    position: relative;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    border-right: none;
+    border-bottom: 1px solid #222;
+  }
+
+  main {
+    margin-left: 0;
+  }
+
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stories-container {
+    margin-left: 0;
+    max-width: 100%;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  .posts-container {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .post-image {
+    width: 100%;
+  }
+
+  .messages-badge-section {
+    bottom: 1rem;
+    right: 1rem;
+    top: auto;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+  .story-image {
+    width: 4em;
+    height: 4em;
+  }
+
+  .nav-item {
+    padding: 0.5em;
+  }
+
+  .nav-icon {
+    margin-right: 0.3em;
+  }
+
+  .posts-container {
+    gap: 1.5em;
+  }
+
+  .post-actions i {
+    font-size: 1.2em;
+  }
+}
+
+/* Désactive le hover pour élargir sur mobile */
+@media (hover: none) {
+  header:hover {
+    width: 4rem;
+  }
+}
