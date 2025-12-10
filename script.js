@@ -195,6 +195,9 @@ function createPostElement(publication) { // publication est un objet avec les d
     
     const commentIcon = document.createElement("button");   // icône de commentaire
     commentIcon.classList.add("fa-regular", "fa-comment", "post-action-icon"); // ajoute des classes CSS à l'icône de commentaire
+
+    const shareIconTemp = document.createElement("span");   // icône de partage temporaire
+    shareIconTemp.classList.add("fa-regular", "fa-paper-plane", "post-action-icon"); // ajoute des classes CSS à l'icône de partage
     
     // Gestion des commentaires
     commentIcon.addEventListener('click', async () => { // lorsqu'on clique sur l'icône de commentaire
@@ -294,22 +297,18 @@ function createPostElement(publication) { // publication est un objet avec les d
         postItem.appendChild(boutonEnvoyer); // ajoute le bouton envoyer
     });
     
-    // Icône de partage
-    const shareIcon = document.createElement("button");  // icône de partage
-    shareIcon.classList.add("fa-regular", "fa-bookmark", "post-action-icon"); // ajoute des classes CSS à l'icône de partage
-    
-    // Ajoute les icônes au conteneur des actions
-    postActions.appendChild(likeIcon); // ajoute l'icône de like
-    postActions.appendChild(commentIcon); // ajoute l'icône de commentaire
-    postActions.appendChild(shareIcon); // ajoute l'icône de partage
+    // Icône de sauvegarde (bookmark)
+    const bookmarkIcon = document.createElement("button");  // icône de sauvegarde
+    bookmarkIcon.classList.add("fa-regular", "fa-bookmark", "post-action-icon"); // ajoute des classes CSS à l'icône de sauvegarde
     
     //------------------------------ Nombre de likes -----------------------------------------
     
-    // Afficher le nombre de likes
-    const likesCount = document.createElement("p"); // élément pour afficher le nombre de likes
+    // Afficher le nombre de likes (à droite du cœur)
+    const likesCount = document.createElement("span"); // élément pour afficher le nombre de likes (span pour rester sur la même ligne)
     likesCount.classList.add("likes-count"); // ajoute une classe CSS au compteur de likes
-    likesCount.style.marginLeft = "1.5em"; // marge à gauche
+    likesCount.style.marginLeft = "0.5em"; // petite marge à gauche du cœur
     likesCount.style.fontWeight = "bold"; // met le texte en gras
+    likesCount.style.fontSize = "0.9em"; // taille de police légèrement plus petite
     const count = publication.nombreLikes || 0; // utilise le nombre de likes de la publication ou 0 par défaut
     if (count > 0) { // n'affiche le compteur que s'il y a au moins 1 like pour éviter d'avoir "0 likes"
         likesCount.textContent = count;
@@ -317,11 +316,17 @@ function createPostElement(publication) { // publication est un objet avec les d
         likesCount.style.display = "none";
     }
     
+    // Ajoute les icônes au conteneur des actions
+    postActions.appendChild(likeIcon); // ajoute l'icône de like
+    postActions.appendChild(likesCount); // ajoute le compteur JUSTE APRÈS le cœur
+    postActions.appendChild(commentIcon); // ajoute l'icône de commentaire
+    postActions.appendChild(shareIconTemp); // ajoute l'icône de partage temporaire
+    postActions.appendChild(bookmarkIcon); // ajoute l'icône de sauvegarde
+    
     // Assemble tous les éléments de la publication
     postItem.appendChild(postHeader); // ajoute l'en-tête à la publication
     postItem.appendChild(mediaElement); // ajoute le média (image ou vidéo) à la publication
     postItem.appendChild(postActions); // ajoute les actions à la publication
-    postItem.appendChild(likesCount); // ajoute le compteur de likes à la publication
     
     return postItem;
 }

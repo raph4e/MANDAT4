@@ -224,7 +224,8 @@ main {
     font-size: 1em; /* Taille de l'icône */
     color: #262626; /* Couleur de l'icône */
     cursor: pointer; /* Curseur en forme de main */
-    margin-right: 33em; /* Décalage vers la gauche */
+    margin-left: auto; /* Pousse l'icône à droite automatiquement */
+    margin-right: 1.5em; /* Distance fixe depuis le bord droit (environ 5% de marge) */
 }
 
 /* Styles pour chaque image de publication */
@@ -239,10 +240,15 @@ main {
 /* Conteneur des icônes sous la publication */
 .post-actions {
     display: flex; /* Utilise flexbox */
+    align-items: center; /* Centre verticalement les icônes */
     gap: 1rem; /* Espace entre les icônes */
     padding: 0.75rem 0; /* Espace en haut et en bas */
     margin-top: 0.5rem; /* Espace après l'image */
     margin-left: 1em;
+    width: 85%; /* Largeur fixe alignée avec l'image */
+    max-width: 69%; /* Aligne la largeur avec l'image de publication */
+    box-sizing: border-box; /* Inclut le padding dans la largeur */
+    overflow: hidden; /* Empêche le débordement */
 }
 
 /* Icônes d'action (coeur, commentaire, enregistrement) */
@@ -254,6 +260,7 @@ main {
     border: none; /* Supprime la bordure */
     background: none;
     transition: color 0.2s ease; /* Animation fluide pour le changement de couleur */
+    gap: 1rem;
 }
 
 /* Cœur rouge quand il est liké */
@@ -263,14 +270,21 @@ main {
 
 /* Icône de sauvegarde */
 .fa-bookmark {
-    margin-left: 12em; /* Aligne l'icône de sauvegarde à droite */
+    margin-left: auto !important; /* Pousse automatiquement à droite */
+    flex-shrink: 0; /* Empêche le rétrécissement */
+    padding-left: 1rem; /* Petit espace à gauche pour compenser le gap */
 }
 
 /* Suppression des styles par défaut des boutons */
 .post-more-icon {
     border: none;
     background: none;
-    
+}
+
+.likes-count {
+    margin-left: 0.5em; /* petite marge à gauche du cœur */
+    font-weight: bold; /* met le texte en gras */
+    font-size: 0.9em; /* taille de police légèrement plus petite */
 }
 
 
@@ -504,17 +518,20 @@ main {
     top: 29rem;
   }
 
-  .fa-ellipsis {
-    margin-left: 16.72em;
-  }
-
   .post-profile-image {
     flex-shrink: 0;
   }
 
+  .post-header {
+    margin-right: auto;
+    max-width: 73%;
+    
+  }
+
   .post-more-icon {
-    margin-left: auto;
-    margin-right: 10.5em;
+    margin-left: auto; /* Reste à droite */
+ 
+
   }
 
   .lien-group {
@@ -522,7 +539,26 @@ main {
     padding-bottom: 0;
   }
 
+  .liked {
+    padding-right: 0;
+    margin-right: 0;
+  }
+
+  .likes-count {
+    margin-left: 0.5em; /* Garde la même marge qu'en desktop */
+    max-width: min-content;
+  }
+
+  .post-action-icon {
+    gap:0.01rem;
+  }
+
+  .fa-bookmark {
+    margin-left: auto; /* Pousse le bookmark à droite */
+  }
 }
+
+
 
 
 
