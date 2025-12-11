@@ -463,7 +463,6 @@ app.get('/getLikes/:idPublication', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 
 // requêtes pour bypass la fonctionalité de base et dicter des id randoms pour ajouter likes & commentaires
 app.post('/addLikeBypass/:idPost', async (req, res) => {
@@ -489,8 +488,8 @@ app.post('/addCommentBypass/:idPost', async (req, res) => {
         const commentaire = {
             id: crypto.randomUUID(),
             idAuteur: crypto.randomUUID(),
-            idPublication: idPublication,
-            message: message
+            idPublication: idPost,
+            message: comment
         };
         await db('commentaires').insert(commentaire);
         res.status(200).json({ message: "Commentaire random ajouté : ", commentaire})
@@ -500,7 +499,8 @@ app.post('/addCommentBypass/:idPost', async (req, res) => {
         res.status(500).json({ error: "Erreur serveur" })
     }
 })
-=======
+
+/*------------------------------ Requête pour rechercher un utilisateur --------------------------------*/
 app.get('/SearchBar', async (req, res) => {
     try {
         const { query } = req.query; // Récupère la requête de recherche depuis les paramètres
@@ -540,4 +540,3 @@ app.get('/SearchPost', async (req, res) => {
         res.status(500).json({ error: "Erreur serveur" });
     }
 });
->>>>>>> 90a2023a46afb8e69a5967debeb5d1bc8cdc7d07

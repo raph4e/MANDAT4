@@ -1,60 +1,130 @@
 //================================== GÉNÉRATION D'IMAGES ET VIDÉOS VIA PEXELS API ==================================//
 
-const { json } = require("body-parser");
+// Clé API Pexels (non utilisée actuellement car on utilise la base de données)
+// const API_KEY = "YEmthrJDjy7vr7tybv61l9DIASRDocDqYjI7oGn28VdSMphODN3AXMXH";
+// cette clé a été obtenue en s'inscrivant Pexels en tant que développeur pour utiliser leur API
+// nous avons stocké les images et vidéos dans la base de données pour éviter de faire trop de requêtes à chaque chargement de la page
 
-// Clé API Pexels
-const API_KEY = "YEmthrJDjy7vr7tybv61l9DIASRDocDqYjI7oGn28VdSMphODN3AXMXH";
+//==============================================   IMAGES DES STORIES ET SUGGESTIONS (CHARGÉES DEPUIS LA BASE DE DONNÉES) ===================================================================
 
-
-//==============================================   IMAGES DES STORIES ET SUGGESTIONS (NON STOCKÉES DANS LA BASE DE DONNÉES) ===================================================================
-
-// Fonction pour charger SEULEMENT les stories et suggestions depuis Pexels (pas de sauvegarde dans la base de données)
+// Fonction pour charger les stories et suggestions depuis la base de données (plus besoin de Pexels ici car elles sont déjà dans la base de données)
 const LoadStoriesAndSuggestions = async () => {
     try {
-        const randomPage = Math.floor(Math.random() * 50) + 1; // Génère un numéro de page aléatoire entre 1 et 50
-        const response = await fetch(`https://api.pexels.com/v1/curated?per_page=10&page=${randomPage}`, { // Requête à l'API Pexels pour obtenir des images
-            headers: { Authorization: API_KEY } // Ajoute la clé API dans les en-têtes de la requête
-        });
-        const data = await response.json(); // convertit la réponse en JSON pour qu'on puisse l'utiliser
-
+        // Récupère toutes les publications depuis la base de données
+        const response = await fetch('/getPublications');
+        // si la réponse n'est pas ok, affiche une erreur   
+        if (!response.ok) {
+            console.error("Erreur lors du chargement des publications pour stories/suggestions");
+            return;
+        }
+        
+        // Récupère les données des publications
+        const publications = await response.json();
+        
+        // Mélange aléatoirement les publications
+        const shuffled = publications.sort(() => 0.5 - Math.random()); 
+        
         //------------------------------ stories --------------------------------------------------
-        data.photos.forEach(photo => { // vient parcourir chaque photo reçue
-            const img = document.createElement("img"); // vient créer un élément image en HTML
-            img.src = photo.src.medium; // vient définir la source de l'image
-            img.alt = photo.alt || "Image de l'utilisateur"; // définit le texte alternatif de l'image
-            img.classList.add("story-image"); // ajoute une classe CSS à l'image
-            document.querySelector(".stories-container").appendChild(img); // ajoute l'image au conteneur des stories en HTML
+        
+        // Sélectionne le conteneur des stories
+        const storiesContainer = document.querySelector(".stories-container");
+        
+        // Prend les 10 premières publications pour les stories
+        shuffled.slice(0, 10).forEach(publication => {
+            const img = document.createElement("img"); // crée un élément image pour chaque story
+            img.src = publication.image; // Utilise l'image de la publication
+            img.alt = publication.description || "Story"; // texte alternatif
+            img.classList.add("story-image"); // ajoute une classe CSS à l'image de la story
+            storiesContainer.appendChild(img); // ajoute l'image au conteneur des stories
         });
+
+        //---------------------------- profil du user connecté ----------------------------------------
+
+        const connectedUserContainer = document.querySelector(".user-profile-container");
+
+        const responseUser = await fetch('/getLoginUser'); // vient chercher les informations de l'utilisateur connecté
+        if (responseUser.ok) {
+            const loginUser = await responseUser.json(); // récupère les données de l'utilisateur connecté
+            const profileImg = document.createElement("img"); // crée un élément image pour la photo de profil
+            profileImg.src = "https://images.pexels.com/photos/35072480/pexels-photo-35072480.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"; // Image de profil par défaut (peut être modifiée pour utiliser une image réelle)
+            profileImg.alt = "Photo de profil"; // texte alternatif
+            profileImg.classList.add("user-profile-image"); // ajoute une classe CSS à l'image de profil
+            const userName = document.createElement("span"); // crée un élément span pour le nom d'utilisateur
+            userName.textContent = loginUser.name; // utilise le nom de l'utilisateur connecté
+            userName.classList.add("user-profile-name", "noto-sans-0"); // ajoute des classes CSS au nom d'utilisateur
+            const changerProfil = document.createElement("span"); // crée un élément span pour le texte "Changer"
+            changerProfil.textContent = "Changer"; // texte du lien pour changer de profil
+            changerProfil.classList.add("change-profile-link", "noto-sans-0"); // ajoute une classe CSS au lien
+            connectedUserContainer.appendChild(profileImg); // ajoute l'image de profil au conteneur
+            connectedUserContainer.appendChild(userName); // ajoute le nom d'utilisateur au conteneur
+            connectedUserContainer.appendChild(changerProfil); // ajoute le lien "Changer" au conteneur (à droite)
+        }
 
         //----------------------------- suggestions d'amis -------------------------------------------------
-        data.photos.slice(0, 5).forEach((photo, index) => { // vient parcourir les 5 premières photos reçues
-            const suggestionItem = document.createElement("div"); // crée un conteneur pour chaque suggestion
+        
+        // Sélectionne le conteneur des suggestions d'amis
+        const suggestionsContainer = document.querySelector(".suggestions-container");
+        
+        // Collecte les noms uniques pour afficher 5 suggestions avec des noms différents
+        const nomsUtilises = new Set(); // Ensemble pour stocker les noms déjà utilisés
+        let suggestionCount = 0; // Compteur de suggestions affichées
+        let indexPublication = 10; // Commence après les 10 stories
+        
+        // Continue jusqu'à avoir 5 suggestions avec des noms uniques
+        while (suggestionCount < 5 && indexPublication < shuffled.length) {
+            const publication = shuffled[indexPublication];
+            indexPublication++;
+            
+            // Prépare le nom d'utilisateur
+            let nomUtilisateur = publication.photographer || `utilisateur_${suggestionCount + 1}`;
+            
+            // Limite le nom à 15 caractères maximum pour éviter le débordement
+            if (nomUtilisateur.length > 15) {
+                nomUtilisateur = nomUtilisateur.substring(0, 15) + '...'; // Ajoute "..." si le nom est tronqué
+            }
+            
+            // Si le nom existe déjà, on passe à la publication suivante
+            if (nomsUtilises.has(nomUtilisateur)) {
+                continue; // Saute cette publication et passe à la suivante
+            }
+            
+            // Ajoute le nom à l'ensemble des noms utilisés
+            nomsUtilises.add(nomUtilisateur);
+            suggestionCount++; // Incrémente le compteur de suggestions
+            
+            // Crée la suggestion
+            const suggestionItem = document.createElement("div"); // conteneur de la suggestion
             suggestionItem.classList.add("suggestion-item", "noto-sans-0"); // ajoute des classes CSS au conteneur
 
+            // Crée les éléments de la suggestion
             const img = document.createElement("img"); // crée un élément image pour la suggestion
-            img.src = photo.src.small; // définit la source de l'image
-            img.alt = photo.alt || "Image de suggestion"; // définit le texte alternatif de l'image
-            img.classList.add("suggestion-image"); // ajoute une classe CSS à l'image
+            img.src = publication.image; // Utilise l'image de la publication
+            img.alt = publication.description || "Suggestion"; // texte alternatif
+            img.classList.add("suggestion-image"); // ajoute une classe CSS à l'image de la suggestion
 
+            // crée un élément span pour le nom d'utilisateur
             const userName = document.createElement("span"); // crée un élément span pour le nom d'utilisateur
-            userName.textContent = photo.photographer || `utilisateur_${index + 1}`; // utilise le nom du photographe ou un nom par défaut
+            userName.textContent = nomUtilisateur; // utilise le nom d'utilisateur préparé
             userName.classList.add("suggestion-name"); // ajoute une classe CSS au nom d'utilisateur
 
-            const followLink = document.createElement("a"); // crée un élément lien pour s'abonner
+            // crée un lien "S'abonner"
+            const followLink = document.createElement("a"); // crée un élément lien pour "S'abonner"
             followLink.textContent = "S'abonner"; // texte du lien
             followLink.href = "#"; // lien vide pour l'instant
             followLink.classList.add("follow-link"); // ajoute une classe CSS au lien
+            
+            // Ajoute les éléments à la suggestion
+            suggestionItem.appendChild(img); // ajoute l'image au conteneur
+            suggestionItem.appendChild(userName); // ajoute le nom d'utilisateur au conteneur
+            suggestionItem.appendChild(followLink); // ajoute le lien "S'abonner" au conteneur
 
-            suggestionItem.appendChild(img); // ajoute l'image au conteneur de la suggestion
-            suggestionItem.appendChild(userName); // ajoute le nom d'utilisateur au conteneur de la suggestion
-            suggestionItem.appendChild(followLink); // ajoute le lien d'abonnement au conteneur de la suggestion
-
-            document.querySelector(".suggestions-container").appendChild(suggestionItem); // ajoute la suggestion au conteneur des suggestions en HTML
-        });
+            suggestionsContainer.appendChild(suggestionItem); // ajoute la suggestion au conteneur des suggestions
+        }
     } catch (error) {
         console.error("Erreur lors du chargement des stories et suggestions:", error);
     }
 };
+
 
 //==============================================   IMAGES ET VIDÉOS DES PUBLICATIONS (STOCKÉES DANS LA BASE DE DONNÉES) ===================================================================
 
@@ -67,18 +137,16 @@ const LoadImages = async () => {
         // 10 pages x 5 images = 5 images qu'on va stocker dans la base de données ensuite
         for (let page = 1; page <= 5; page++) {
             promises.push( // elles sont d'abord toutes stockées dans un tableau de promesses
-                fetch(`https://api.pexels.com/v1/curated?per_page=5&page=${page}`, { // Requête à l'API Pexels pour obtenir des images
-                    headers: { Authorization: API_KEY } // Ajoute la clé API dans les en-têtes de la requête
-                }).then(res => res.json()).then(data => ({ type: 'photo', data })) // chaque promesse résout en un objet avec le type et les données
+                fetch(`/api/pexels/curated?per_page=5&page=${page}`) // Requête via notre proxy backend
+                    .then(res => res.json()).then(data => ({ type: 'photo', data })) // chaque promesse résout en un objet avec le type et les données
             );
         }
 
         // 10 pages x 5 vidéos = 5 vidéos
         for (let page = 1; page <= 5; page++) { // elles seront stockées dans la base de données ensuite
             promises.push( // elles sont d'abord toutes stockées dans un tableau de promesses
-                fetch(`https://api.pexels.com/videos/popular?per_page=5&page=${page}`, { // Requête à l'API Pexels pour obtenir des vidéos
-                    headers: { Authorization: API_KEY } // Ajoute la clé API dans les en-têtes de la requête
-                }).then(res => res.json()).then(data => ({ type: 'video', data })) // chaque promesse résout en un objet avec le type et les données
+                fetch(`/api/pexels/videos?per_page=5&page=${page}`) // Requête via notre proxy backend
+                    .then(res => res.json()).then(data => ({ type: 'video', data })) // chaque promesse résout en un objet avec le type et les données
             );
         }
 
@@ -128,8 +196,6 @@ const LoadImages = async () => {
                 }
             }
         }
-
-        console.log("200 publications (100 photos + 100 vidéos) chargées et sauvegardées depuis Pexels");
     } catch (error) {
         console.error("Erreur lors du chargement des publications:", error);
     }
@@ -427,13 +493,9 @@ async function LoadPublicationsFromDB() {
 
         // si il y a des publications, les affiche
         if (publications.length > 0) {
-            console.log(`${publications.length} publications disponibles en BDD`);
-
             // Sélectionner 10 publications aléatoires
             const shuffled = publications.sort(() => 0.5 - Math.random()); // mélange les publications de manière aléatoire
             const selectedPublications = shuffled.slice(0, 50); // prend les 10 premières publications du tableau mélangé
-
-            console.log(`Affichage de ${selectedPublications.length} publications aléatoires`);
 
             //--------------------------- Afficher chaque publication------------------------------------------------------
             for (const pub of selectedPublications) { // vient parcourir chaque publication sélectionnée
@@ -472,7 +534,6 @@ window.onload = async () => {
 
     // 3. Si pas de publications dans la base de données, charger depuis Pexels (et elles seront sauvegardées)
     if (!hasPublications) {
-        console.log("Aucune publication en BDD, chargement depuis Pexels...");
         await LoadImages(); // Charge 100 photos + 100 vidéos et les sauvegarde en BDD
         // Puis recharge depuis la base pour les afficher
         await LoadPublicationsFromDB();
@@ -490,10 +551,6 @@ async function toggleLike(idPublication, likeIcon) {
         // Récupère le conteneur de la publication pour trouver le compteur
         const postItem = likeIcon.closest('.post-item'); // trouve l'élément parent le plus proche avec la classe 'post-item'
         const likesCount = postItem.querySelector('.likes-count'); // sélectionne l'élément du compteur de likes dans la publication
-
-        // Debugging logs
-        console.log('toggleLike - idPublication:', idPublication);
-        console.log('toggleLike - likesCount element:', likesCount);
 
         // Vérifie si déjà liké
         const checkResponse = await fetch(`/checkLike/${encodeURIComponent(idPublication)}`); // encodeURIComponent pour s'assurer que l'ID est correctement encodé dans l'URL
@@ -525,7 +582,6 @@ async function toggleLike(idPublication, likeIcon) {
                 // Met à jour le compteur pour refléter le retrait du like
                 const currentLikes = await fetch(`/getLikes/${encodeURIComponent(idPublication)}`); // récupère le nombre actuel de likes
                 const likesData = await currentLikes.json(); // convertit la réponse en JSON
-                console.log('Données likes reçues:', likesData); // log pour le debugging
                 if (likesCount) { // vérifie si l'élément du compteur existe
                     if (likesData.count > 0) { // si le nombre de likes est supérieur à 0
                         likesCount.textContent = likesData.count; // met à jour le texte du compteur
@@ -534,8 +590,6 @@ async function toggleLike(idPublication, likeIcon) {
                         likesCount.style.display = "none"; // cache le compteur s'il n'y a plus de likes
                     }
                 }
-
-                console.log('Like retiré');
             } else {
                 const errorData = await response.json(); // récupère les données d'erreur
                 console.error('Erreur:', errorData); // affiche l'erreur dans la console
@@ -560,7 +614,6 @@ async function toggleLike(idPublication, likeIcon) {
                 // Met à jour le compteur
                 const currentLikes = await fetch(`/getLikes/${encodeURIComponent(idPublication)}`); // récupère le nombre actuel de likes
                 const likesData = await currentLikes.json(); // convertit la réponse en JSON
-                console.log('Données likes reçues:', likesData); // log pour le debugging
                 if (likesCount) { // vérifie si l'élément du compteur existe
                     if (likesData.count > 0) { // si le nombre de likes est supérieur à 0
                         likesCount.textContent = likesData.count; // met à jour le texte du compteur
@@ -569,8 +622,6 @@ async function toggleLike(idPublication, likeIcon) {
                         likesCount.style.display = "none"; // cache le compteur s'il n'y a pas de likes (peu probable ici)
                     }
                 }
-
-                console.log('Like ajouté');
             } else {
                 const errorData = await response.json(); // récupère les données d'erreur
                 console.error('Erreur:', errorData); // affiche l'erreur dans la console

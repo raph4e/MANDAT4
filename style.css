@@ -287,12 +287,72 @@ main {
     font-size: 0.9em; /* taille de police légèrement plus petite */
 }
 
+/*======================================== AFFICHAGE DU USER CONNECTÉ EN HAUT DE SUGGESTIONS ===========================*/
+
+.user-profile-section {
+
+    position: absolute; /* Position absolue pour fixer ne haut mais en laissant défiler avec le contenu */
+    top: 3.1rem; /* Position depuis le haut du contenu */
+    right: 2rem; /* Position depuis la droite */
+    width: 30em;
+    max-width: 80%; /* Largeur fixe pour la section */
+    padding: 0.8rem; /* Espace autour du contenu */
+    padding-right: 10em; /* Espace à droite pour éviter le débordement */
+    padding-left:5.2em;
+
+}
+
+.user-profile-container {
+    display: flex; /* Utilise flexbox pour aligner les éléments */
+    flex-direction: row; /* Aligne les éléments en ligne */
+    align-items: center; /* Aligne verticalement au centre */
+    justify-content: space-between; /* Espace entre les éléments */
+    gap: 0.5rem; /* Espace entre les éléments */
+    padding: 0.5rem 0; /* Espace en haut et en bas */
+    width: 30em; /* Prend toute la largeur disponible */
+    max-width: 80%;
+    margin-top: -2.3em; /* Décalage vers le haut */
+
+}
+
+.user-profile-image {
+    width: 2.9em; /* Largeur fixe pour chaque image de suggestion */
+    height: 2.9em; /* Hauteur fixe pour chaque image */
+    border-radius: 50%; /* Forme circulaire */
+    object-fit: cover; /* Recadre l'image pour qu'elle remplisse le cercle */
+    flex-shrink: 0; /* Empêche les images de rétrécir */
+    margin-bottom: 0.8em; /* Espace en dessous de l'image */
+    margin-right:auto;
+    border:#b9b7b7 0.01em solid;
+}
+
+.user-profile-name {
+    font-size: 0.80em; /* Taille de police */
+    font-weight: 550; /* Poids de la police */
+    color: #000; /* Couleur du texte */
+    flex: 1; /* Prend l'espace disponible entre l'image et "Changer" */
+}
+
+.change-profile-link {
+    font-size: 0.75em; /* Taille de police */
+    color: #212be6; /* Couleur du lien */
+    text-decoration: none; /* Pas de soulignement */
+    font-weight: 600; /* Poids de la police */
+    cursor: pointer; /* Curseur en forme de main */
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    flex-shrink: 0; /* Empêche le lien de rétrécir */
+    margin-left: auto; /* Pousse automatiquement à droite */
+    text-align: right; /* Aligne le texte à droite */
+    padding-right: 0; /* Pas de padding à droite pour coller au bord */
+    padding-left:8.5em;
+}
+
 /*=========================================== SUGGESTIONS AMIS ==========================================*/
 
 /* Conteneur de la section des suggestions d'amis */
 .suggestions-section {
     position: absolute; /* Position absolue pour fixer ne haut mais en laissant défiler avec le contenu */
-    top: 0.5rem; /* Position depuis le haut du contenu */
+    top: 5rem; /* Position depuis le haut du contenu */
     right: 2rem; /* Position depuis la droite */
     width: 300px; /* Largeur fixe pour la section */
     padding: 0.8rem; /* Espace autour du contenu */
@@ -334,6 +394,7 @@ main {
     object-fit: cover; /* Recadre l'image pour qu'elle remplisse le cercle */
     flex-shrink: 0; /* Empêche les images de rétrécir */
     margin-bottom: 0.8em; /* Espace en dessous de l'image */
+    border:#b9b7b7 0.01em solid;
 }
 
 /* Styles pour le nom de chaque suggestion d'ami */
@@ -351,13 +412,18 @@ main {
 /* Styles pour le lien "S'abonner" */
 .follow-link {
     font-size: 0.75em; /* Taille de police */
-    color: #3897f0; /* Couleur du lien */
+    color: #212be6; /* Couleur du lien */
     text-decoration: none; /* Pas de soulignement */
     font-weight: 600; /* Poids de la police */
     cursor: pointer; /* Curseur en forme de main */
     white-space: nowrap; /* Empêche le texte de passer à la ligne */
     flex-shrink: 0; /* Empêche le lien de rétrécir */
-    margin-left: 12em; /* Décalage vers la gauche */
+    margin-left: auto; /* Pousse automatiquement à droite */
+    text-align: right; /* Aligne le texte à droite */
+    padding-right: 0; /* Pas de padding à droite pour coller au bord */
+    padding-left:13em;
+    max-width:50%;
+
 }
 
 /* Styles pour le titre de la section des suggestions d'amis */
@@ -378,7 +444,11 @@ main {
     font-weight: 600; /* Poids de la police */
     cursor: pointer; /* Curseur en forme de main */
     white-space: nowrap; /* Empêche le texte de passer à la ligne */
-    margin-left: 4.7em; /* Décalage vers la gauche */
+    margin-left: auto; /* Pousse automatiquement à droite */
+    text-align: right; /* Aligne le texte à droite */
+    padding-right: 0; /* Pas de padding à droite pour coller au bord */
+    padding-left:5em;
+    max-width: 90%;
 }
 
 /* Effet au survol du span (Afficher tout) */
@@ -390,6 +460,35 @@ main {
 /* Effet au survol du lien "S'abonner" */
 .follow-link:hover {
     color: #1a73e8; /* Couleur bleue plus foncée au survol */
+
+}
+
+/*======================================= PETITE SECTION INFORMATIVE EN DESSOUS DE SUGGESTIONS ============================*/
+
+.bottom-info-container {
+   position: absolute; /* Position absolue pour fixer ne haut mais en laissant défiler avec le contenu */
+    top: 28rem; /* Position depuis le haut du contenu */
+    right: 4rem; /* Position depuis la droite */
+    width: 30em;
+    max-width: 80%; /* Largeur fixe pour la section */
+    padding: 0.8rem; /* Espace autour du contenu */
+    background-color: white; /* Fond blanc */
+    padding-right: 6em; /* Espace à droite pour éviter le débordement */
+    margin-right:3em;
+    font-size: 0.7em; /* Taille de police */
+    color: #878787 !important; /* Couleur grise pour le texte */
+    line-height: 1.8; /* Augmente l'espacement entre les lignes */
+
+}
+
+.bottom-info-container a {
+    color: #878787 !important; /* Couleur grise pour les liens */
+    text-decoration: none; /* Pas de soulignement */
+}
+
+.copyright {
+    padding-top:1.2em;
+    font-size: 1.1em;
 }
 
 /*=========================================== PASTILLE MESSAGES ==========================================*/
@@ -403,6 +502,7 @@ main {
     box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.18), 0px -2px 6px rgba(0, 0, 0, 0.02); /* Ombre en bas et en haut */
     padding: 1em 8em 1em 1em; /* Espacement interne */
     border-radius: 30em; /* Bords arrondis */
+    background-color: #fff; /* Fond blanc */
 }
 
 /* Styles pour le texte dans la pastille de messages */
@@ -466,8 +566,13 @@ main {
 /* Grands écrans */
 @media (max-width: 1440px) {
   .stories-container {
-    max-width: calc((6em + 0.8rem) * 6); /* Limite à 5 images visibles : (largeur image + gap) * 5 */
-    margin-left: 3em;
+    max-width: calc((5em + 0.01rem) * 8); /* Limite à 6 images visibles : (largeur image + gap) * 5 */
+    margin-left: 2em;
+    padding-left: 2em;
+    padding-right: 1em;
+    margin-right: 1em;
+    
+
   }
    
   header {
