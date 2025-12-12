@@ -52,6 +52,7 @@ async function createTable() {
     if (!commentaires) {
         await db.schema.createTable("commentaires", (table) => {
             table.string("id").primary();
+            table.string('idUtilisateur').notNullable();
             table.string("idAuteur").notNullable();
             /*
             nous sommes conscients que dans une vraie situation, une clé étrangère serait requise

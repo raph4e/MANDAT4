@@ -15,6 +15,10 @@ const path = require('path');
 const { db, createTable } = require('./db');
 const { default: knex } = require('knex');
 
+// Augmenter la limite pour les requêtes JSON (par défaut 100kb)
+app.use(express.json({ limit: '10mb' })); // accepte jusqu'à 10MB
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 // Ajout des en-têtes CORS pour permettre les requêtes depuis le frontend (car sinon faisait des erreurs de politique de même origine et envoyait des requêtes bloquées)
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -26,6 +30,7 @@ app.use((req, res, next) => {
 // Servir les fichiers statiques
 app.use(express.static(path.join(__dirname, "../../")));
 app.use(express.static(path.join(__dirname, "../client")));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // AJOUTER CETTE LIGNE
 
 // Route principale - redirige vers connexion.html
 app.get('/', (req, res) => {
@@ -220,38 +225,64 @@ app.get('/getLoginUser', async (req, res) => {
 
 /////////////////////////////////////// Création des requêtes publications ///////////////////////////////////////
 
-/*------------------------------ Requête qui permet d'ajouter une publication-------------------------------- */
 app.post('/addPublication', async (req, res) => {
-    try {
-        /* Récupère les infos de la publication */
-        const { id, image, video, description, photographer, idAuteur } = req.body;
-
-        /* Vérifie si la publication existe déjà (évite les doublons) */
-        const existingPublication = await db('publications').where({ id }).first(); // recherche par id
-        if (existingPublication) { // si la publication existe déjà
-            return res.status(200).json({ message: "Publication déjà existante", publication: existingPublication });
-        }
-
-        /* sinon crée la publication */
-        const publication = {
-            id,
-            image: image || null,
-            video: video || null,
-            description: description || null,
-            photographer: photographer || null,
-            idAuteur: idAuteur || null, // Peut être null pour Pexels car généré automatiquement
-            nombreLikes: 0
-        };
-
-        /* Insère la publication dans la base de données */
-        await db('publications').insert(publication);
-
-        res.status(201).json({ message: "Publication ajoutée", publication });
-
-    } catch (error) {
-        console.error("Erreur lors de l'ajout de la publication :", error);
-        res.status(500).json({ error: "Erreur serveur" });
+  try {
+    console.log('Requête reçue:', req.body);
+    const { image, biographie } = req.body;
+    
+    if (!image) {
+      return res.status(400).json({ error: 'Image manquante' });
     }
+
+    // Récupère l'utilisateur connecté
+    const utilisateurConnecte = await db('utilisateurConnecte').select('id', 'name').first();
+    if (!utilisateurConnecte) {
+      return res.status(401).json({ error: "Vous devez être connecté pour publier" });
+    }
+
+    // Extraire et sauvegarder l'image base64
+    const matches = image.match(/^data:image\/(\w+);base64,(.+)$/);
+    if (!matches) {
+      return res.status(400).json({ error: 'Format image invalide' });
+    }
+    
+    const ext = matches[1];
+    const data = matches[2];
+    const buffer = Buffer.from(data, 'base64');
+    
+    // Sauvegarder dans le dossier uploads
+    const fs = require('fs');
+    const filename = `post_${Date.now()}.${ext}`;
+    const uploadsDir = path.join(__dirname, 'uploads');
+    
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+    
+    const filepath = path.join(uploadsDir, filename);
+    fs.writeFileSync(filepath, buffer);
+    
+    // Enregistrer dans la base de données (utilise les colonnes existantes)
+    const publication = {
+      id: crypto.randomUUID(),
+      idAuteur: utilisateurConnecte.id,  // Utilise idAuteur au lieu de idUtilisateur
+      photographer: utilisateurConnecte.name,
+      image: `/uploads/${filename}`,      // Utilise 'image' au lieu de 'imageUrl'
+      video: null,                        // Pas de vidéo
+      description: biographie || '',
+      nombreLikes: 0,
+      dateCreation: new Date().toISOString()
+    };
+    
+    await db('publications').insert(publication);
+    
+    console.log('Publication insérée avec succès:', publication.id);
+    res.json({ success: true, publication });
+    
+  } catch (err) {
+    console.error('Erreur détaillée:', err);
+    res.status(500).json({ error: 'Erreur serveur', details: err.message });
+  }
 });
 
 /*------------------------------ Requête pour récupérer toutes les publications------------------------------------ */
