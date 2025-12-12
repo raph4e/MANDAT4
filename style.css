@@ -661,7 +661,28 @@ main {
   }
 
   .fa-bookmark {
-    margin-left: auto; /* Pousse le bookmark à droite */
+    margin-left: auto !important; /* Reste à droite */
+    padding-left: 0.5rem !important; /* Espace minimal, pousse bien à droite */
+  }
+
+  .post-actions {
+    width: 100%; /* Utilise toute la largeur disponible en responsive 1440 */
+    max-width: 70%; /* Aligne avec l'en-tête (post-header) pour garder la mise en page */
+  }
+
+  .bottom-info-container {
+    right: 4rem;
+  }
+
+  .user-profile-container {
+    position:absolute;
+    left:21rem;
+  }
+
+  .change-profile-link {
+    padding-left: 0em;
+    padding-right:7.8em;
+
   }
 }
 

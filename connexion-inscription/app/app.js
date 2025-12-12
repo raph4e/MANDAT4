@@ -28,9 +28,9 @@ app.use((req, res, next) => {
 });
 
 // Servir les fichiers statiques
-app.use(express.static(path.join(__dirname, "../../")));
-app.use(express.static(path.join(__dirname, "../client")));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // AJOUTER CETTE LIGNE
+app.use(express.static(path.join(__dirname, "../../"))); // client global
+app.use(express.static(path.join(__dirname, "../client"))); // client connexion-inscription
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // dossier pour les images uploadées
 
 // Route principale - redirige vers connexion.html
 app.get('/', (req, res) => {
@@ -227,40 +227,47 @@ app.get('/getLoginUser', async (req, res) => {
 
 app.post('/addPublication', async (req, res) => {
   try {
-    console.log('Requête reçue:', req.body);
+    // Log de la requête reçue
+    console.log('Requête reçue:', req.body); 
     const { image, biographie } = req.body;
     
+    // si l'image est manquante, renvoie une erreur
     if (!image) {
       return res.status(400).json({ error: 'Image manquante' });
     }
 
     // Récupère l'utilisateur connecté
     const utilisateurConnecte = await db('utilisateurConnecte').select('id', 'name').first();
+    // si aucun utilisateur connecté, renvoie une erreur
     if (!utilisateurConnecte) {
       return res.status(401).json({ error: "Vous devez être connecté pour publier" });
     }
 
     // Extraire et sauvegarder l'image base64
-    const matches = image.match(/^data:image\/(\w+);base64,(.+)$/);
+    const matches = image.match(/^data:image\/(\w+);base64,(.+)$/); // expression régulière pour extraire le type et les données (.match sert à faire correspondre une chaîne avec une expression régulière)
+    // si le format est invalide, renvoie une erreur
     if (!matches) {
       return res.status(400).json({ error: 'Format image invalide' });
     }
     
-    const ext = matches[1];
-    const data = matches[2];
-    const buffer = Buffer.from(data, 'base64');
+    // si le format est valide, extrait l'extension et les données
+    const ext = matches[1]; // type d'image (png, jpg, etc.)
+    const data = matches[2]; // données en base64
+    const buffer = Buffer.from(data, 'base64'); // convertit les données en buffer binaire pour l'écriture dans un fichier
     
     // Sauvegarder dans le dossier uploads
-    const fs = require('fs');
-    const filename = `post_${Date.now()}.${ext}`;
-    const uploadsDir = path.join(__dirname, 'uploads');
+    const fs = require('fs'); // module de système de fichiers qui sauve les fichiers qu'on veut poster nous-même
+    const filename = `post_${Date.now()}.${ext}`; // nom de fichier unique basé sur le timestamp
+    const uploadsDir = path.join(__dirname, 'uploads'); // dossier uploads pour sauvegarder les images
     
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
+    // si le dossier uploads n'existe pas, le crée
+    if (!fs.existsSync(uploadsDir)) { //existeSync vérifie si le dossier existe et uploadDir est le chemin du dossier uploads
+      fs.mkdirSync(uploadsDir, { recursive: true }); // recursive: true crée les dossiers parents si nécessaire
     }
     
-    const filepath = path.join(uploadsDir, filename);
-    fs.writeFileSync(filepath, buffer);
+    // écrit le fichier image
+    const filepath = path.join(uploadsDir, filename); // chemin complet du fichier
+    fs.writeFileSync(filepath, buffer); // écrit le buffer dans le fichier (writeFileSync écrit de manière synchrone et le buffer est les données binaires)
     
     // Enregistrer dans la base de données (utilise les colonnes existantes)
     const publication = {
@@ -274,11 +281,13 @@ app.post('/addPublication', async (req, res) => {
       dateCreation: new Date().toISOString()
     };
     
-    await db('publications').insert(publication);
+    await db('publications').insert(publication); // insère la publication dans la base de données
     
+    // Log de succès
     console.log('Publication insérée avec succès:', publication.id);
     res.json({ success: true, publication });
     
+    // En cas d'erreur
   } catch (err) {
     console.error('Erreur détaillée:', err);
     res.status(500).json({ error: 'Erreur serveur', details: err.message });

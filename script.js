@@ -71,12 +71,12 @@ const LoadStoriesAndSuggestions = async () => {
         let indexPublication = 10; // Commence après les 10 stories
         
         // Continue jusqu'à avoir 5 suggestions avec des noms uniques
-        while (suggestionCount < 5 && indexPublication < shuffled.length) {
-            const publication = shuffled[indexPublication];
-            indexPublication++;
+        while (suggestionCount < 5 && indexPublication < shuffled.length) { // tandis qu'on a moins de 5 suggestions et qu'on n'a pas épuisé les publications
+            const publication = shuffled[indexPublication]; // prend la publication courante
+            indexPublication++; // incrémente l'index pour la prochaine itération
             
             // Prépare le nom d'utilisateur
-            let nomUtilisateur = publication.photographer || `utilisateur_${suggestionCount + 1}`;
+            let nomUtilisateur = publication.photographer || `utilisateur_${suggestionCount + 1}`; // utilise le nom du photographe ou un nom par défaut
             
             // Limite le nom à 15 caractères maximum pour éviter le débordement
             if (nomUtilisateur.length > 15) {
