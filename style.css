@@ -351,6 +351,11 @@ main {
     padding-left:8.2em;
 }
 
+.change-profile-link:hover {
+    color: #1c24bc; /* Couleur bleue plus foncée au survol */
+    text-decoration: underline;
+}
+
 /*=========================================== SUGGESTIONS AMIS ==========================================*/
 
 /* Conteneur de la section des suggestions d'amis */
@@ -463,7 +468,7 @@ main {
 
 /* Effet au survol du lien "S'abonner" */
 .follow-link:hover {
-    color: #1a73e8; /* Couleur bleue plus foncée au survol */
+    color: #1c24bc; /* Couleur bleue plus foncée au survol */
 
 }
 
