@@ -55,6 +55,10 @@ const LoadStoriesAndSuggestions = async () => {
             const changerProfil = document.createElement("span"); // crée un élément span pour le texte "Changer"
             changerProfil.textContent = "Changer"; // texte du lien pour changer de profil
             changerProfil.classList.add("change-profile-link", "noto-sans-0"); // ajoute une classe CSS au lien
+            changerProfil.style.cursor = "pointer"; // rend le curseur en pointeur
+            changerProfil.addEventListener("click", () => {
+                window.location.href = "/connexion.html"; // redirige vers la page de connexion pour changer de profil
+            });
             connectedUserContainer.appendChild(profileImg); // ajoute l'image de profil au conteneur
             connectedUserContainer.appendChild(userName); // ajoute le nom d'utilisateur au conteneur
             connectedUserContainer.appendChild(changerProfil); // ajoute le lien "Changer" au conteneur (à droite)
