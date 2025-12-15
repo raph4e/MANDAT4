@@ -867,4 +867,4 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 
 // laissé en commentaires pour ne pas trop mettre d'entrées dans la bd
-//populateLikesComments()
+populateLikesComments()
